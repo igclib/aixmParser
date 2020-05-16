@@ -15,7 +15,6 @@ class AixmAirspaces4_5:
         self.oIdxUniUid2OrgName = dict()
         self.oIdxAseUid2AseUid = dict()
         self.oIdxAseUid2AseUid2 = dict()
-        
         self.loadRefFiles()                 #Referentials
         return
 
@@ -87,7 +86,7 @@ class AixmAirspaces4_5:
             sMsg = "Indexing {0} - {1}".format(sXmlTag, sTitle)
             self.oCtrl.oLog.info(sMsg)
             oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
-            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg)
+            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
             idx = 0
             for o in oList:
                 idx+=1
@@ -108,7 +107,7 @@ class AixmAirspaces4_5:
             sMsg = "Indexing {0} - {1}".format(sXmlTag, sTitle)
             self.oCtrl.oLog.info(sMsg)
             oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
-            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg)
+            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
             idx = 0
             for o in oList:
                 idx+=1
@@ -125,7 +124,7 @@ class AixmAirspaces4_5:
             sMsg = "Indexing {0} - {1}".format(sXmlTag, sTitle)
             self.oCtrl.oLog.info(sMsg)
             oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
-            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg)
+            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
             idx = 0
             for o in oList:
                 idx+=1
@@ -145,7 +144,7 @@ class AixmAirspaces4_5:
             sMsg = "Indexing {0} - {1}".format(sXmlTag, sTitle)
             self.oCtrl.oLog.info(sMsg)
             oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
-            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg)
+            barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
             idx = 0
             for o in oList:
                 idx+=1
@@ -260,7 +259,7 @@ class AixmAirspaces4_5:
         sMsg = "Loading {0} - {1}".format(sXmlTag, sTitle)
         self.oCtrl.oLog.info(sMsg)
         oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
-        barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg)
+        barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
         idx = 0
         for o in oList:
             idx+=1

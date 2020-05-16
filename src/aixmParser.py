@@ -13,7 +13,7 @@ __AppVers__     = bpaTools.getVersionFile()
 ___AppId___     = __AppName__ + " v" + __AppVers__
 __OutPath__     = __AppPath__ + "../out/"
 __LogFile__     = __OutPath__ + __AppName__ + ".log"
-oLog = bpaTools.Logger(___AppId___,__LogFile__)
+
 
 def syntaxe():
     print("Aeronautical Information Exchange Model (AIXM) Converter")
@@ -39,7 +39,8 @@ def syntaxe():
     print("")
     print("  <Option(s)> - Complementary Options:")
     print("    " + aixmReader.CONST.optHelp + "              Help syntax")
-    print("    " + aixmReader.CONST.optCleanLog + "       Clean log file before exec")
+    print("    " + aixmReader.CONST.optSilent + "         Silent mode (no log-file, no system-message, but log-report is available ;-)")
+    print("    " + aixmReader.CONST.optCleanLog + "       Clean log-file before exec")
     print("    " + aixmReader.CONST.optALL + "            All areas of aeronautic maps (IFR+VFR areas)")    
     print("    " + aixmReader.CONST.optIFR + "            Specific upper vues of aeronautic maps (IFR areas)")    
     print("    " + aixmReader.CONST.optVFR + "            Specific lower vues of aeronautic maps (only IFR areas, without IFR areas)")    
@@ -55,8 +56,9 @@ def syntaxe():
     print("     OpenAir test format: http://xcglobe.com/cloudapi/browser  -or-  http://cunimb.net/openair2map.php")
     return
 
+
 ### Context d'excecution
-if len(sys.argv)<2:
+if __name__ == '__main__' and len(sys.argv)<2:
     ##oLog.isDebug = True     # Write the debug-messages in the log file
     sSrcPath = "../tst/"
     #------- fichiers officiels & opérationnels ---
@@ -66,10 +68,10 @@ if len(sys.argv)<2:
     #sSrcFile = sSrcPath + "20191210_BPa_ZonesComplementaires_aixm45.xml"
     #sSrcFile = sSrcPath + "20190401_WPa_ParcCevennes_aixm45.xml"
     #------- fichiers de tests  ---
-    sSrcFile = sSrcPath + "20191213_FFVP_AIRSPACE_FRANCE_TXT_1911_aixm45.xml"
-#    sSrcFile = sSrcPath + "20191214_BPa_FR-BPa4XCsoar_aixm45.xml"
+    #sSrcFile = sSrcPath + "20191213_FFVP_AIRSPACE_FRANCE_TXT_1911_aixm45.xml"
+    #sSrcFile = sSrcPath + "20191214_BPa_FR-BPa4XCsoar_aixm45.xml"
     #sSrcFile = sSrcPath+"aixm5.1_testHeader.xml"
-    #sSrcFile = sSrcPath+"aixm4.5_SIA-FR_map-Airspaces2.xml"
+    sSrcFile = sSrcPath+"aixm4.5_SIA-FR_map-Airspaces2.xml"
     #------- tests unitaires ---
     #sys.argv += [sSrcFile, "-Fgeojson", aixmReader.CONST.optTstGeojson, aixmReader.CONST.optDraft, aixmReader.CONST.optCleanLog]
     #sys.argv += [sSrcFile, "-Fgeojson", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optDraft, aixmReader.CONST.optMakePoints4map, aixmReader.CONST.optCleanLog]
@@ -83,13 +85,16 @@ if len(sys.argv)<2:
     #sys.argv += [sSrcFile, "-Fall", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optIFR, aixmReader.CONST.optVFR, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optCleanLog]
     #------- appels standards ---
     #sys.argv += [sSrcFile, "-Fall", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optDraft, aixmReader.CONST.optCleanLog]
-    sys.argv += [sSrcFile, "-Fall", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optCleanLog]
-    #sys.argv += [sSrcFile, "-Fall", "-Tall", aixmReader.CONST.optALL, aixmReader.CONST.optIFR, aixmReader.CONST.optVFR, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optCleanLog]
-    #sys.argv += [aixmReader.CONST.optHelp]
+    #sys.argv += [sSrcFile, "-Fall", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optCleanLog]
+    #sys.argv += [sSrcFile, "-Fall", aixmReader.CONST.typeAIRSPACES, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optSilent]
+    sys.argv += [sSrcFile, "-Fall", "-Tall", aixmReader.CONST.optALL, aixmReader.CONST.optIFR, aixmReader.CONST.optVFR, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optCleanLog]
+    #sys.argv += [sSrcFile, "-Fall", "-Tall", aixmReader.CONST.optALL, aixmReader.CONST.optIFR, aixmReader.CONST.optVFR, aixmReader.CONST.optFreeFlight, aixmReader.CONST.optSilent]
+    #sys.argv = [sys.argv[0], aixmReader.CONST.optHelp, aixmReader.CONST.optSilent]
 
 
 sSrcFile = sys.argv[1]                              #Nom de fichier
 oOpts = bpaTools.getCommandLineOptions(sys.argv)    #Arguments en dictionnaire
+oLog = bpaTools.Logger(___AppId___, __LogFile__, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
 oLog.writeCommandLine(sys.argv)                     #Trace le contexte d'execution
 
 
