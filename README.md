@@ -70,6 +70,7 @@ With:
   <Option(s)> - Complementary Options:  
     -h              Help syntax  
     -CleanLog       Clean log file before exec  
+	-Silent         Silent mode (no log-file, no system-message, but log-report is available ;-)  
     -IFR            Specific upper vues of aeronautic maps (IFR areas)  
     -VFR            Specific lower vues of aeronautic maps (only IFR areas, without IFR areas)  
     -FreeFlight     Specific Paragliding/Hanggliding maps (out E,F,G,W areas and others...)  
