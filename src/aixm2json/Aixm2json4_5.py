@@ -3,9 +3,7 @@
 import bpaTools
 import aixmReader
 
-import math
 from shapely.geometry import LineString, Point
-from pyproj import Proj, transform
 
 
 class Aixm2json4_5:

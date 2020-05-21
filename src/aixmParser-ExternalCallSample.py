@@ -5,7 +5,7 @@ import aixmReader
 
 
 ### Context applicatif
-appName     = "aixmParser"                             #or yourAppName
+appName     = "aixmParser"                              #or yourAppName
 appPath     = bpaTools.getFilePath(__file__)            #or yourAppPath
 appVersion     = bpaTools.getVersionFile()              #or yourAppVersion
 appId     = appName + " v" + appVersion
@@ -58,9 +58,11 @@ aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficage
 ####  Préparation d'appel ####
 oOpts = bpaTools.getCommandLineOptions(aArgv)                   #Arguments en dictionnaire
 oLog = bpaTools.Logger(appId, logFile, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
+
 if aixmReader.CONST.optCleanLog in oOpts:
-    oLog.resetFile()                                            #Clean du log si demandé
-bpaTools.createFolder(outPath)                                  #Init dossier de sortie
+    oLog.resetFile()                                #Clean du log si demandé
+oLog.writeCommandLine(aArgv)                        #Trace le contexte d'execution
+bpaTools.createFolder(outPath)                      #Init dossier de sortie
 
 #### Appel du parser  ####
 aixmCtrl = aixmReader.AixmControler(srcFile, outPath, oLog)     #Init controler
@@ -71,6 +73,4 @@ if aixmReader.CONST.optSilent in oOpts:
     if oLog.CptCritical>0 or oLog.CptError>0:
         print("/!\ Processing Error(s)")
         print(oLog.getReport())
-    
-    
     
