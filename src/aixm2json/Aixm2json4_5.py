@@ -53,7 +53,6 @@ class Aixm2json4_5:
                 self.oCtrl.oLog.warning("Missing TWR coordinates {0}".format(uni.UniUid), outConsole=True)
         return
 
-
     def parseAerodromes(self):
         sTitle = "Aerodromes / Heliports"
         sXmlTag = "Ahp"
@@ -91,7 +90,6 @@ class Aixm2json4_5:
         geom = {"type":"Point", "coordinates":self.oCtrl.oAixmTools.geo2coordinates(ahp)}
         return {"type":"Feature", "properties":prop, "geometry":geom}
 
-
     def parseObstacles(self):
         sTitle = "Obstacles"
         sXmlTag = "Obs"
@@ -125,7 +123,6 @@ class Aixm2json4_5:
         geom = {"type":"Point", "coordinates":self.oCtrl.oAixmTools.geo2coordinates(obs)}
         return {"type":"Feature", "properties":prop, "geometry":geom}
 
-
     def parseRunwayCenterLinePosition(self):
         sTitle = "Runway Center Line Position"
         sXmlTag = "Rcp"
@@ -153,7 +150,6 @@ class Aixm2json4_5:
         prop = self.oCtrl.oAixmTools.addProperty(prop, rcp, "uomDistVer", "verticalUnit", optional=True)
         geom = {"type":"Point", "coordinates":self.oCtrl.oAixmTools.geo2coordinates(rcp)}
         return {"type":"Feature", "properties":prop, "geometry":geom}
-
 
     def parseGateStands(self):
         sTitle = "Gates and Stands"
@@ -209,7 +205,7 @@ class Aixm2json4_5:
         self.oCtrl.oAixmTools.writeGeojsonFile("borders", geojson)
         return
     
-    def gbr2json(self, gbr):    
+    def gbr2json(self, gbr): 
         prop = self.oCtrl.oAixmTools.initProperty("Geographic border")
         prop = self.oCtrl.oAixmTools.addProperty(prop, gbr, "codeType", "type")
         prop = self.oCtrl.oAixmTools.addProperty(prop, gbr.GbrUid, "txtName", "name")
@@ -224,7 +220,6 @@ class Aixm2json4_5:
             l.append((g[-1][0], g[-1][1]))
         geom = {"type":"LineString", "coordinates":g}        
         return ({"type":"Feature", "properties":prop, "geometry":geom}, l)
-
 
     def findAixmObjectAirspacesBorders(self, sAseUid):
         #----Old src - Lenteur de recherche
@@ -289,22 +284,21 @@ class Aixm2json4_5:
             
         barre.reset()
         return
-        
 
     def saveAirspaces(self):
         if self.oCtrl.ALL:
-            self.saveAirspacesFilter("all", "All Airspaces map")
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optALL])
         if self.oCtrl.IFR:
-            self.saveAirspacesFilter("ifr", "IFR map (Instrument Flihgt Rules")
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optIFR])
         if self.oCtrl.VFR:
-            self.saveAirspacesFilter("vfr", "VFR map (Visual Flihgt Rules")
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optVFR])
         if self.oCtrl.FreeFlight:
-            self.saveAirspacesFilter("ff", "FreeFlight map (Paragliding / Hanggliding)")
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optFreeFlight])
         return
 
-
-    def saveAirspacesFilter(self, context, title):
-        sMsg = "Prepare GeoJSON file - {0}".format(title)
+    def saveAirspacesFilter(self, aContext):
+        context = aContext[0]
+        sMsg = "Prepare GeoJSON file - {0}".format(aContext[1])
         self.oCtrl.oLog.info(sMsg)
         barre = bpaTools.ProgressBar(len(self.oAirspacesCatalog.oAirspaces), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
         idx = 0
@@ -327,7 +321,6 @@ class Aixm2json4_5:
             self.oCtrl.oAixmTools.writeGeojsonFile("airspaces", oGeojson, context)
         return
 
-
     def parseAirspaceBorder(self, oZone, oBorder):
         g = []              #geometry
         points4map = []
@@ -343,17 +336,11 @@ class Aixm2json4_5:
             if oBorder.uomRadius.string == "KM":
                 radius = radius * 1000
             
-            if self.oCtrl.bMakeWithNewSrc:
-                Pcenter = Point(lon_c, lat_c)
-                if self.oCtrl.MakePoints4map:
-                    points4map.append(self.oCtrl.oAixmTools.make_point(Pcenter, "Circle Center of {0}".format(oZone["nameV"])))
-                g = self.oCtrl.oAixmTools.make_arc(Pcenter, radius)
-            else:
-                srs = Proj(proj="ortho", lat_0=lon_c, lon_0=lat_c)
-                g = self.oCtrl.oAixmTools.make_circle_ortho(lon_c, lat_c, radius, srs, oBorder)
-
+            Pcenter = Point(lon_c, lat_c)
+            if self.oCtrl.MakePoints4map:
+                points4map.append(self.oCtrl.oAixmTools.make_point(Pcenter, "Circle Center of {0}".format(oZone["nameV"])))
+            g = self.oCtrl.oAixmTools.make_arc(Pcenter, radius)
             geom = {"type":"Polygon", "coordinates":[g]}
-            
         else:
             avx_list = oBorder.find_all("Avx")
             for avx_cur in range(0,len(avx_list)):
@@ -372,10 +359,7 @@ class Aixm2json4_5:
                 # 'Counter Clockwise Arc' or 'Clockwise Arc'
                 #Nota: 'ABE' = 'Arc By Edge' ne semble pas utilisé dans les fichiers SIA-France et Eurocontrol-Europe
                 elif codeType in ["CCA", "CWA"]:
-                    start = self.oCtrl.oAixmTools.geo2coordinates(avx, recurse=False)
-                    if not self.oCtrl.bMakeWithNewSrc:
-                        g.append(start)    #Pas la peine d'ajouter ce point ds le nouveau source car imposé dans le tracé du cercle/arc
-                    
+                    start = self.oCtrl.oAixmTools.geo2coordinates(avx, recurse=False)                    
                     if avx_cur+1 == len(avx_list):
                         stop = g[0]
                     else:
@@ -402,51 +386,11 @@ class Aixm2json4_5:
                     if avx.uomRadiusArc.string == "KM":
                         radius = radius * 1000
                         
-                    if self.oCtrl.bMakeWithNewSrc:
-                        #Test non-concluant - Tentative d'amélioration des arc par recalcul systématique du rayon sur la base des coordonnées des points
-                        #arc = self.oCtrl.oAixmTools.make_arc2(Pcenter, Pstart, Pstop, 0.0, (codeType=="CWA"))
-                        arc = self.oCtrl.oAixmTools.make_arc2(Pcenter, Pstart, Pstop, radius, (codeType=="CWA"))
-                        for o in arc:   g.append(o)
-                    else:
-                        #Old and bad source :-(
-                        # Convert to local meters
-                        #srs = Proj(proj="ortho", lat_0=center[1], lon_0=center[0])             #ChristQ Err :-(
-                        srs = Proj(proj="ortho", lat_0=center[0], lon_0=center[1])              #BPascal src ;-)
-                        start_x, start_y = transform(p1=self.oCtrl.oAixmTools.pWGS, p2=srs, x=start[0], y=start[1])
-                        stop_x, stop_y = transform(p1=self.oCtrl.oAixmTools.pWGS, p2=srs, x=stop[0], y=stop[1])
-                        center_x, center_y = transform(p1=self.oCtrl.oAixmTools.pWGS, p2=srs, x=center[0], y=center[1])
-                        # start / stop angles sont exprimés en raidans
-                        start_angle = round(self.xy2angle(start_x-center_x, start_y-center_y), self.oCtrl.digit4roundArc)
-                        stop_angle = round(self.xy2angle(stop_x-center_x, stop_y-center_y), self.oCtrl.digit4roundArc)
-                                            
-                        if codeType == "CWA" and stop_angle > start_angle:
-                            stop_angle = stop_angle - 2 * aixmReader.CONST.pi
-                        if codeType == "CCA" and stop_angle < start_angle:
-                            start_angle = start_angle - 2 * aixmReader.CONST.pi
-                        
-                        # recompute radius from center/start coordinates in local projection
-                        radius = math.sqrt(start_x**2+start_y**2)                 
-                        
-                        #Détermination du pas d'incrément de l'angle de l'arc de cercle
-                        if self.oCtrl.Draft:
-                            step = 0.10
-                        else:
-                            step = 0.025
-                        
-                        #Inversion du pas d'incrément dans le cas d'un arc anti-horaire...
-                        if codeType == "CWA":
-                            step = step*-1
-    
-                        #Construction des segments de l'arc
-                        for a in self.frange(start_angle+step/2, stop_angle-step/2, step):
-                            x = center_x + math.cos(a) * radius
-                            y = center_y + math.sin(a) * radius
-                            lon, lat = transform(p1=srs, p2=self.oCtrl.oAixmTools.pWGS, x=x, y=y)
-                            if lon==math.inf or lat==math.inf:
-                                sMsg = " - Context oBorder.aseuid[mid']={0} a={1} x={2} y={3}".format(oBorder.AseUid["mid"], a, x, y)
-                                self.oCtrl.oLog.critical("transform() return error" + sMsg, outConsole=True)
-                            else:
-                                g.append([lon, lat])
+                    #Test non-concluant - Tentative d'amélioration des arc par recalcul systématique du rayon sur la base des coordonnées des points
+                    #arc = self.oCtrl.oAixmTools.make_arc2(Pcenter, Pstart, Pstop, 0.0, (codeType=="CWA"))
+                    arc = self.oCtrl.oAixmTools.make_arc2(Pcenter, Pstart, Pstop, radius, (codeType=="CWA"))
+                    for o in arc:
+                        g.append(o)
 
                 # 'Sequence of geographical (political) border vertexes'    
                 elif codeType == "FNT":

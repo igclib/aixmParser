@@ -49,8 +49,8 @@ aArgv = [appName, srcFile, "-Fall", "-Tall", aixmReader.CONST.optALL, aixmReader
 
 
 ####  Ajout de l'option d'appel pour la gestion du Log  ####
-#aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficages sur console système
-aArgv += [aixmReader.CONST.optSilent]      #Mode silencieux sans utilisation du fichier log et sans retour d'affichage
+aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficages sur console système
+#aArgv += [aixmReader.CONST.optSilent]      #Mode silencieux sans utilisation du fichier log et sans retour d'affichage
 
 
 
