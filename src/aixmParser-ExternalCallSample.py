@@ -16,7 +16,7 @@ logFile     = outPath + "_" + appName + ".log"
 ####  Quelques fichiers source  ####
 srcPath = "../tst/"
 #------- fichiers officiels & opérationnels ---
-srcFile = srcPath + "20200618_aixm4.5_SIA-FR.xml"
+#srcFile = srcPath + "20200618_aixm4.5_SIA-FR.xml"
 #srcFile = srcPath + "20200326_aixm4.5_Eurocontrol-FR.xml"
 #srcFile = srcPath + "20200510_BPa_FR-ZSM_Protection-des-rapaces_aixm45.xml"
 #srcFile = srcPath + "20191210_BPa_ZonesComplementaires_aixm45.xml"
@@ -25,7 +25,7 @@ srcFile = srcPath + "20200618_aixm4.5_SIA-FR.xml"
 #srcFile = srcPath + "20191213_FFVP_AIRSPACE_FRANCE_TXT_1911_aixm45.xml"
 #srcFile = srcPath + "20191214_BPa_FR-BPa4XCsoar_aixm45.xml"
 #srcFile = srcPath + "aixm5.1_testHeader.xml"
-#srcFile = srcPath + "aixm4.5_SIA-FR_map-Airspaces2.xml"
+srcFile = srcPath + "aixm4.5_SIA-FR_map-Airspaces2.xml"
 
 
 ####  Préparation de quelques options d'appels  ####
@@ -49,8 +49,8 @@ aArgv = [appName, srcFile, "-Fall", "-Tall", aixmReader.CONST.optALL, aixmReader
 
 
 ####  Ajout de l'option d'appel pour la gestion du Log  ####
-aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficages sur console système
-#aArgv += [aixmReader.CONST.optSilent]      #Mode silencieux sans utilisation du fichier log et sans retour d'affichage
+#aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficages sur console système
+aArgv += [aixmReader.CONST.optSilent]      #Mode silencieux sans utilisation du fichier log et sans retour d'affichage
 
 
 
@@ -66,3 +66,11 @@ bpaTools.createFolder(outPath)                                  #Init dossier de
 aixmCtrl = aixmReader.AixmControler(srcFile, outPath, oLog)     #Init controler
 aixmCtrl.execParser(oOpts)                                      #Execution des traitements
 
+#Bilan des traitements disponible en mode 'Silent' ;-)
+if aixmReader.CONST.optSilent in oOpts:
+    if oLog.CptCritical>0 or oLog.CptError>0:
+        print("/!\ Processing Error(s)")
+        print(oLog.getReport())
+    
+    
+    
