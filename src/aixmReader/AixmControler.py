@@ -4,8 +4,8 @@ import bpaTools
 import aixmReader
 import aixm2json
 import aixm2openair
-
 import sys, traceback
+
 
 class CONST:
     nm = 1852                           # Nautic Mile to meters

@@ -2,7 +2,6 @@
 
 import bpaTools
 import aixmReader
-
 from shapely.geometry import LineString, Point
 
 
@@ -12,8 +11,8 @@ class Aixm2json4_5:
         bpaTools.initEvent(__file__, oCtrl.oLog)
         self.oCtrl = oCtrl
         self.oAirspacesCatalog = None
-        self.__geoBorders = None                    #Geographic borders dictionary
-        self.__geoAirspaces = None                  #Geographic airspaces dictionary
+        self.geoBorders = None                    #Geographic borders dictionary
+        self.geoAirspaces = None                  #Geographic airspaces dictionary
         return 
 
     def parseControlTowers(self):
@@ -187,8 +186,8 @@ class Aixm2json4_5:
         sMsg = "Parsing {0} to GeoJSON - {1}".format(sXmlTag, sTitle)
         self.oCtrl.oLog.info(sMsg)
         
-        if self.__geoBorders == None:
-            self.__geoBorders = dict()
+        if self.geoBorders == None:
+            self.geoBorders = dict()
             oList = self.oCtrl.oAixm.doc.find_all(sXmlTag)
             barre = bpaTools.ProgressBar(len(oList), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
             idx = 0
@@ -197,7 +196,7 @@ class Aixm2json4_5:
                 idx+=1
                 j,l = self.gbr2json(gbr)
                 geojson.append(j)
-                self.__geoBorders[gbr.GbrUid["mid"]] = LineString(l)
+                self.geoBorders[gbr.GbrUid["mid"]] = LineString(l)
                 barre.update(idx)
         barre.reset()
         self.oCtrl.oAixmTools.writeGeojsonFile("borders", geojson)
@@ -219,19 +218,8 @@ class Aixm2json4_5:
         geom = {"type":"LineString", "coordinates":g}        
         return ({"type":"Feature", "properties":prop, "geometry":geom}, l)
 
-    def findAixmObjectAirspacesBorders(self, sAseUid):
-        #----Old src - Lenteur de recherche
-        #oBorder = [tagAbd for tagAbd in (self.oCtrl.oAixm.doc.findAll("Abd")) if tagAbd.AbdUid.AseUid["mid"]==sAseUid]
-        #if len(oBorder)==1:
-        #    return oBorder[0]
-        #New optimized source with index
-        oBorder=None
-        if sAseUid in self.oAirspacesCatalog.oAirspacesBorders:
-            oBorder = self.oAirspacesCatalog.oAirspacesBorders[sAseUid]
-        return oBorder
-
     def findJsonObjectAirspacesBorders(self, sAseUid):
-        for o in self.__geoAirspaces:
+        for o in self.geoAirspaces:
             if o["properties"]["UId"]==sAseUid:
                 return o["geometry"]
         return None
@@ -240,7 +228,7 @@ class Aixm2json4_5:
         self.oAirspacesCatalog = airspacesCatalog
         
         #Controle de prerequis
-        if self.__geoBorders == None:
+        if self.geoBorders == None:
             self.parseGeographicBorders()
             
         sTitle = "Airspaces Borders"
@@ -256,12 +244,12 @@ class Aixm2json4_5:
         
         barre = bpaTools.ProgressBar(len(self.oAirspacesCatalog.oAirspaces), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
         idx = 0
-        self.__geoAirspaces = []                #Réinitialisation avant traitement global
+        self.geoAirspaces = []                #Réinitialisation avant traitement global
         for k,oZone in self.oAirspacesCatalog.oAirspaces.items():
             idx+=1
             if not oZone["groupZone"]:          #Ne pas traiter les zones de type 'Regroupement'
                 sAseUid = oZone["UId"]
-                oBorder = self.findAixmObjectAirspacesBorders(sAseUid)
+                oBorder = self.oAirspacesCatalog.findAixmObjectAirspacesBorders(sAseUid)
                 if oBorder:
                     self.parseAirspaceBorder(oZone, oBorder)
                 else:
@@ -271,9 +259,9 @@ class Aixm2json4_5:
                     else:
                         geom = self.findJsonObjectAirspacesBorders(sAseUidBase)  #Recherche si la zone de base a déjà été pasrsé
                         if geom:
-                            self.__geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
+                            self.geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
                         else:
-                            oBorder = self.findAixmObjectAirspacesBorders(sAseUidBase)
+                            oBorder = self.oAirspacesCatalog.findAixmObjectAirspacesBorders(sAseUidBase)
                             if oBorder==None:
                                 self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0} AseUidBase={1}".format(sAseUid, sAseUidBase), outConsole=False)
                             else:
@@ -281,42 +269,6 @@ class Aixm2json4_5:
             barre.update(idx)
             
         barre.reset()
-        return
-
-    def saveAirspaces(self):
-        if self.oCtrl.ALL:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optALL])
-        if self.oCtrl.IFR:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optIFR])
-        if self.oCtrl.VFR:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optVFR])
-        if self.oCtrl.FreeFlight:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optFreeFlight])
-        return
-
-    def saveAirspacesFilter(self, aContext):
-        context = aContext[0]
-        sMsg = "Prepare GeoJSON file - {0}".format(aContext[1])
-        self.oCtrl.oLog.info(sMsg)
-        barre = bpaTools.ProgressBar(len(self.oAirspacesCatalog.oAirspaces), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
-        idx = 0
-        oGeojson = []       #Initialisation avant filtrage spécifique
-        for o in self.__geoAirspaces:
-            oZone = o["properties"]
-            idx+=1
-            if not oZone["groupZone"]:          #Ne pas traiter les zones de type 'Regroupement'
-                if context=="all":
-                    oGeojson.append(o)
-                if context=="ifr" and not oZone["vfrZone"]:
-                    oGeojson.append(o)
-                if context=="vfr" and oZone["vfrZone"]:
-                    oGeojson.append(o)
-                if context=="ff" and oZone["freeFlightZone"]:
-                    oGeojson.append(o)
-            barre.update(idx)
-        barre.reset()        
-        if oGeojson:
-            self.oCtrl.oAixmTools.writeGeojsonFile("airspaces", oGeojson, context)
         return
 
     def parseAirspaceBorder(self, oZone, oBorder):
@@ -399,8 +351,8 @@ class Aixm2json4_5:
                     else:
                         stop = self.oCtrl.oAixmTools.geo2coordinates(avx_list[avx_cur+1])
                         
-                    if avx.GbrUid["mid"] in self.__geoBorders:
-                        fnt = self.__geoBorders[avx.GbrUid["mid"]]
+                    if avx.GbrUid["mid"] in self.geoBorders:
+                        fnt = self.geoBorders[avx.GbrUid["mid"]]
                         start_d = fnt.project(Point(start[0], start[1]), normalized=True)
                         stop_d = fnt.project(Point(stop[0], stop[1]), normalized=True)
                         geom = self.oCtrl.oAixmTools.substring(fnt, start_d, stop_d, normalized=True)
@@ -412,7 +364,7 @@ class Aixm2json4_5:
                         g.append(start)
                 else:
                     g.append(self.oCtrl.oAixmTools.geo2coordinates(avx))
-    
+
             if len(g) == 0:
                 self.oCtrl.oLog.error("Geometry vide\n{0}".format(oBorder.prettify()), outConsole=True)
                 geom = None
@@ -429,7 +381,43 @@ class Aixm2json4_5:
         #Ajout spécifique des points complémentaires pour map des cartographies
         for g0 in points4map:
             for g1 in g0:
-                self.__geoAirspaces.append(g1)
-        self.__geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
+                self.geoAirspaces.append(g1)
+        self.geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
+        return
+
+    def saveAirspaces(self):
+        if self.oCtrl.ALL:
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optALL])
+        if self.oCtrl.IFR:
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optIFR])
+        if self.oCtrl.VFR:
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optVFR])
+        if self.oCtrl.FreeFlight:
+            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optFreeFlight])
+        return
+
+    def saveAirspacesFilter(self, aContext):
+        context = aContext[0]
+        sMsg = "Prepare GeoJSON file - {0}".format(aContext[1])
+        self.oCtrl.oLog.info(sMsg)
+        barre = bpaTools.ProgressBar(len(self.oAirspacesCatalog.oAirspaces), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
+        idx = 0
+        oGeojson = []       #Initialisation avant filtrage spécifique
+        for o in self.geoAirspaces:
+            oZone = o["properties"]
+            idx+=1
+            if not oZone["groupZone"]:          #Ne pas traiter les zones de type 'Regroupement'
+                if context=="all":
+                    oGeojson.append(o)
+                if context=="ifr" and not oZone["vfrZone"]:
+                    oGeojson.append(o)
+                if context=="vfr" and oZone["vfrZone"]:
+                    oGeojson.append(o)
+                if context=="ff" and oZone["freeFlightZone"]:
+                    oGeojson.append(o)
+            barre.update(idx)
+        barre.reset()        
+        if oGeojson:
+            self.oCtrl.oAixmTools.writeGeojsonFile("airspaces", oGeojson, context)
         return
 

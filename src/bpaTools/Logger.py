@@ -150,9 +150,9 @@ class Logger:
 
     def writeCommandLine(self, argv) -> None:
         if not self.isSilent:
-            self.info("Ligne de commande:")
+            self.info("Command line:")
             idx = 0
             for arg in argv:
-                self.info("    sys.argv[{0}] {1}".format(idx, arg))
+                self.info("    argv[{0}] {1}".format(idx, arg))
                 idx += 1        
         return

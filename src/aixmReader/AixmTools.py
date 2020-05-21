@@ -39,6 +39,28 @@ class AixmTools:
         return
 
 
+    def writeOpenairFile(self, sFileName, oOpenair, context=""):
+        assert(isinstance(sFileName, str))
+        if sFileName=="airspaces":
+            if context=="all":              sFileName = sFileName + "-all"            #Suffixe pour fichier toutes zones
+            if context=="ifr":              sFileName = sFileName + "-ifr"            #Suffixe pour fichier Instrument-Fligth-Rules
+            if context=="vfr":              sFileName = sFileName + "-vfr"            #Suffixe pour fichier Visual-Fligth-Rules
+            if context=="ff":               sFileName = sFileName + "-freeflight"     #Suffixe pour fichier Vol-Libre (Paraglinding/Hanggliding)
+        sOutFile = sFileName + ".txt"
+        sizeMap = len(oOpenair)
+        self.oCtrl.oLog.info("Write file {0} - {1} areas in map".format(sOutFile, sizeMap), outConsole=True)
+        with open(self.oCtrl.sOutPath + sOutFile, "w", encoding=self.oCtrl.sEncoding) as output:
+            oHeader = self.getJsonPropHeaderFile(sFileName, context, sizeMap)
+            output.write("*"*50 +"\n")
+            for head in oHeader:
+                output.write("*" + " "*5 + "{0} - {1}\n".format(head, oHeader[head]))
+            output.write("*"*50 + "\n\n")
+            for airspace in oOpenair:
+                output.write("\n".join(airspace))
+                output.write("\n\n")
+        return
+
+
     def writeJsonFile(self, sFileName, oJson):
         assert(isinstance(sFileName, str))
         sOutFile = sFileName + ".json"
@@ -87,9 +109,6 @@ class AixmTools:
 
         
     def geo2coordinates(self, o, latitude=None, longitude=None, recurse=True):
-        #assert(isinstance(latitude, float))
-        #assert(isinstance(longitude, float))
-        
         """ codeDatum or CODE_DATUM Format:
             WGE [WGS-84 (GRS-80).] 
             WGC [WGS-72.] 
@@ -116,42 +135,23 @@ class AixmTools:
             NAW [North American 1983.] 
             U [Other datum or unknown..]
         """
-        
         #Ctrl du référentiel des coordonnées
         codedatum = o.find("codeDatum", recursive=recurse).string
         if not codedatum in ("WGE", "U"):
             self.oCtrl.oLog.critical("geo2coordinates() codedatum is {0}\n{1}".format(codedatum, o), outConsole=True)
 
         if latitude:
-            s = latitude
+            sLat = latitude
         else:
-            s = o.find("geoLat", recursive=recurse).string
+            sLat = o.find("geoLat", recursive=recurse).string
             
-        lat = s[:-1]
-        if len(lat)==2 or lat[2]==".": # DD[.dddd]
-            lat = float(lat)
-        elif len(lat)==4 or lat[4]==".": # DDMM[.mmmm]
-            lat = int(lat[0:2])+float(lat[2:])/60
-        else: # DDMMSS[.sss]
-            lat = int(lat[0:2])+int(lat[2:4])/60+float(lat[4:])/3600
-        if s[-1] == "S":
-            lat = -lat
-    
         if longitude:
-            s = longitude
+            sLon = longitude
         else:
-            s = o.find("geoLong", recursive=recurse).string
+            sLon = o.find("geoLong", recursive=recurse).string
             
-        lon = s[:-1]
-        if len(lon) == 3 or lon[3] == ".":
-            lon = float(lon)
-        elif len(lon) == 5 or lon[5] == ".":
-            lon = int(lon[0:3])+float(lon[3:])/60
-        else:
-            lon = int(lon[0:3])+int(lon[3:5])/60+float(lon[5:])/3600
-        if s[-1] == "W":
-            lon = -lon
-        return([round(lon,self.oCtrl.digit4roundPoint), round(lat,self.oCtrl.digit4roundPoint)])
+        lat, lon = bpaTools.GeoCoordinates.geoStr2dd(sLat, sLon, self.oCtrl.digit4roundPoint)
+        return([lon, lat])
         
 
     def getField(self, o, inputname, outputname=None, optional=False):
