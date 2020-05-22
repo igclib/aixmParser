@@ -152,7 +152,33 @@ class AixmTools:
             
         lat, lon = bpaTools.GeoCoordinates.geoStr2dd(sLat, sLon, self.oCtrl.digit4roundPoint)
         return([lon, lat])
+
+
+    def convertLength(self, length:float, srcRef:str, dstRef:str):
+        srcRef = srcRef.upper()
+        dstRef = dstRef.upper()
+        if not srcRef in ["NM","KM","M","FT"]:      raise Exception("Invalid input - srcRef")
+        if not dstRef in ["NM","M"]:                raise Exception("Invalid input - dstRef")
+        if srcRef == dstRef:
+            return length
         
+        if   dstRef=="M" and srcRef=="NM":
+            length = length * aixmReader.CONST.nm
+        elif dstRef=="M" and srcRef=="KM":
+            length = length * 1000
+        elif dstRef=="M" and srcRef=="FT":
+            length = length * aixmReader.CONST.ft
+        elif dstRef=="NM" and srcRef=="KM":
+            length = (length * 1000) / aixmReader.CONST.nm
+        elif dstRef=="NM" and srcRef=="M":
+            length = length / aixmReader.CONST.nm
+        elif dstRef=="NM" and srcRef=="FT":
+            length = (length * aixmReader.CONST.ft) / aixmReader.CONST.ft
+        else:
+            self.oCtrl.oLog.critical("convertLength() error value={0} srcRef={1} srcRef={2}}".format(length, srcRef, dstRef), outConsole=False)
+        
+        return length
+
 
     def getField(self, o, inputname, outputname=None, optional=False):
         if (o is None) and (not self.oCtrl.oLog is None):
@@ -169,6 +195,7 @@ class AixmTools:
             ret = ret.replace(" :",":")
             ret = ret.replace(" ;",";")
             ret = ret.replace(" ,",",")
+            ret = ret.replace(" .",".")
             ret = ret.replace("  "," ")
             return {outputname:ret}
         else:
@@ -176,9 +203,11 @@ class AixmTools:
                 self.oCtrl.oLog.error("Field not Found in={0} out={1}\n{2}".format(inputname, outputname, o), outConsole=True)    
         return None
 
+
     def addField(self, prop, field):
         if field: prop.update(field)
         return prop
+
 
     def addProperty(self, prop, o, inputname, outputname=None, optional=False):
         field = self.getField(o, inputname, outputname, optional)
@@ -189,7 +218,7 @@ class AixmTools:
         prop = dict()
         prop = self.addField(prop, {"zoneType":context})
         return prop
-    
+
 
     """
     geojson Colors attributes: stroke; stroke-width; stroke-opacity; fill; fill-opacity
@@ -258,6 +287,7 @@ class AixmTools:
         Pcenter: center-point of arc = Point([lon,lat]) in float values
         radius: is a float value in meters
         angles: in degrees (default values for construct a 'Circle')
+        clockwiseArc : is boolean value ; True='Clockwise Arc' and False='Counter Clockwise Arc'
     """
     def make_arc(self, Pcenter, radius, start_angle=0.0, stop_angle=360.0, clockwiseArc=False):
         assert(isinstance(Pcenter, Point))
@@ -284,7 +314,7 @@ class AixmTools:
     Construct array of coords for make Arc or Circle
         Pcenter, Pstart and Pstop : Points of arc = Point([lon,lat]) in float values
         radius: is a float value in meters (par défaut, est calculé avec l'écart entre Pstart et Pcenter)
-        clockwiseArc : is boolean value ; True='Clockwise Arc' and False='Counter Clockwise Arc' 
+        clockwiseArc : is boolean value ; True='Clockwise Arc' and False='Counter Clockwise Arc'
     """
     def make_arc2(self, Pcenter, Pstart, Pstop, radius=0.0, clockwiseArc=True):
         assert(isinstance(Pcenter, Point))
