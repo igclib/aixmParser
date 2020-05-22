@@ -81,7 +81,7 @@ class AixmTools:
     
     def getJsonPropHeaderFile(self, sFileName="", context="", sizeMap=0):
         prop = dict()
-        prop.update({"software": self.oCtrl.oLog.sLogName})
+        prop.update({"software": self.oCtrl.oLog.getLongName()})
         prop.update({"created": datetime.datetime.now().isoformat()})
         prop.update({"content": sFileName})
         if context=="all":

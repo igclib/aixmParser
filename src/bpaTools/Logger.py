@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import bpaTools
-
 import sys, logging
+
 
 class Logger:
     
@@ -19,17 +19,18 @@ class Logger:
     #       oLog.log.critical("Un message Critique")
     #       ../..
     #       oLog.closeFile()
-    def __init__(self, sLogName:str, sLogFile:str, isDebug:bool=False, isSilent:bool=False)-> None:
+    def __init__(self, sLogName:str, sLogFile:str, sContext="", isDebug:bool=False, isSilent:bool=False)-> None:
         bpaTools.initEvent(__file__, isSilent=isSilent)
         #print(self.__class__.__name__, self.__class__.__module__, self.__class__.__dir__)
         self.sLogName = sLogName
         self.sLogFile = sLogFile
+        self.sContext = sContext
         self.log = None
         self.isSilent = isSilent    # Set as 'True' for Silent mode (no log-file, no system-message, but log-report is available ;-)
         self.isDebug = isDebug      # Set as 'True' for write the debug-messages in the log-file
         if not self.isSilent:
-            print(self.sLogName)
-            print("-" * len(self.sLogName))
+            msg = self.getLongName()
+            print(msg + "\n" + ("-" * len(msg)))
         self.__initFile__()
         return
 
@@ -65,6 +66,12 @@ class Logger:
     def __repr__(self) -> str:
         #Org value - print(self.__class__.__repr__)
         return "[{0}.{1}]logName={2};logFile={3}".format(self.__class__.__module__, self.__class__.__name__, self.sLogName, self.sLogFile)
+
+    def getShortName(self) -> str:
+        return self.sLogName
+    
+    def getLongName(self) -> str:
+        return "({0}) {1}".format(self.sLogName, self.sContext) 
 
     def getInfo(self) -> str:
         return "[{0}.{1}]{2}".format(self.__class__.__module__, self.__class__.__name__, self.sLogName)

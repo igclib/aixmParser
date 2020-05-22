@@ -5,12 +5,13 @@ import aixmReader
 
 
 ### Context applicatif
-appName     = "aixmParser"                              #or yourAppName
-appPath     = bpaTools.getFilePath(__file__)            #or yourAppPath
-appVersion     = bpaTools.getVersionFile()              #or yourAppVersion
-appId     = appName + " v" + appVersion
-outPath     = appPath + "../out/"
-logFile     = outPath + "_" + appName + ".log"
+callingContext      = "Paragliding-OpenAir-FrenchFiles"         #Your app calling context
+appName             = "aixmParser"                              #or your app name
+appPath             = bpaTools.getFilePath(__file__)            #or your app path
+appVersion          = bpaTools.getVersionFile()                 #or your app version
+appId               = appName + " v" + appVersion
+outPath             = appPath + "../out/"
+logFile             = outPath + "_" + appName + ".log"
 
 
 ####  Quelques fichiers source  ####
@@ -57,7 +58,7 @@ aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficage
 
 ####  Préparation d'appel ####
 oOpts = bpaTools.getCommandLineOptions(aArgv)                   #Arguments en dictionnaire
-oLog = bpaTools.Logger(appId, logFile, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
+oLog = bpaTools.Logger(appId, logFile, callingContext, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
 
 if aixmReader.CONST.optCleanLog in oOpts:
     oLog.resetFile()                                #Clean du log si demandé
