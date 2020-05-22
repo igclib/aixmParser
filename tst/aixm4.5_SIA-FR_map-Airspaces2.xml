@@ -15540,10 +15540,10 @@ Activity known on :#
 		</AseUid>
 		<txtLocalType>FRA</txtLocalType>
 		<codeDistVerUpper>STD</codeDistVerUpper>
-		<valDistVerUpper>660</valDistVerUpper>
+		<valDistVerUpper>100</valDistVerUpper>
 		<uomDistVerUpper>FL</uomDistVerUpper>
 		<codeDistVerLower>STD</codeDistVerLower>
-		<valDistVerLower>305</valDistVerLower>
+		<valDistVerLower>50</valDistVerLower>
 		<uomDistVerLower>FL</uomDistVerLower>
 		<Att>
 			<codeWorkHr>H24</codeWorkHr>
@@ -15983,8 +15983,8 @@ Safety officer 93ème RAM : 06 73 90 50 33</txtRmk>
 		</AbdUid>
 		<Avx>
 			<codeType>GRC</codeType>
-			<geoLat>474641.00N</geoLat>
-			<geoLong>0024133.00W</geoLong>
+			<geoLat>474630.00N</geoLat>
+			<geoLong>0024914.00W</geoLong>
 			<codeDatum>WGE</codeDatum>
 			<valCrc>6274BA43</valCrc>
 		</Avx>
