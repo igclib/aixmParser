@@ -8,9 +8,9 @@ import sys, traceback
 
 
 class CONST:
-    nm = 1852                           # Nautic Mile to meters
-    ft = 0.3048                         # foot in meter
-    pi = 3.1415926                      #Valeur de l'angle PI
+    nm = 1852                           # Nautic Mile to Meter
+    ft = 0.3048                         # Foot to Meter
+    pi = 3.1415926                      # PI angle
     frmtGEOJSON = "-Fgeojson"
     frmtOPENAIR = "-Fopenair"
     frmtKML = "-Fkml"
@@ -162,6 +162,18 @@ class AixmControler:
         return
 
 
+    def saveAirspaces(self, parser, criticalErrCatalog=0):
+        if self.ALL and criticalErrCatalog==0:
+            parser.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optALL])
+        if self.IFR and criticalErrCatalog==0:
+            parser.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optIFR])
+        if self.VFR and criticalErrCatalog==0:
+            parser.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optVFR])
+        if self.FreeFlight:
+            parser.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optFreeFlight])
+        return
+
+
     def execParser(self, oOpts):
         self.IFR = bool(CONST.optIFR in oOpts)
         self.VFR = bool(CONST.optVFR in oOpts)
@@ -237,29 +249,28 @@ class AixmControler:
             oAs.saveAirspacesCalalog()          #Construction des catalogues
             oAs.clearAirspaceIdx()              #Libération de mémoire
 
-            #Interruption nécessaire pour mise a niveau des référentiels
+            #En cas d'err, interruption nécessaire pour mise à niveau du référentiel 'refGroundEstimatedHeight.json'
             criticalErrCatalog = self.oLog.CptCritical
-            if criticalErrCatalog>0:
-                self.oLog.critical("Interrupt process - Show Critical items in log file", outConsole=True)
+
+            found = any(item in (CONST.frmtGEOJSON, CONST.frmtALL) for item in oOpts.keys())
+            if found:
+                if o2json == None:
+                    o2json = self.getFactory("parser", "geojson")       #Récupération dynamique du parser aixm/geojson associé au format du fichier source
+                o2json.parseAirspacesBorders(oAs)
+                self.saveAirspaces(o2json, criticalErrCatalog)
                 bExec = True
-            else:
-                found = any(item in (CONST.frmtGEOJSON, CONST.frmtALL) for item in oOpts.keys())
-                if found:
-                    if o2json == None:
-                        o2json = self.getFactory("parser", "geojson")       #Récupération dynamique du parser aixm/geojson associé au format du fichier source
-                    o2json.parseAirspacesBorders(oAs)
-                    o2json.saveAirspaces()
-                    bExec = True
-    
-                found = any(item in (CONST.frmtOPENAIR, CONST.frmtALL) for item in oOpts.keys())
-                if found:
-                    o2openair = self.getFactory("parser", "openair")        #Récupération dynamique du parser aixm/openair associé au format du fichier source
-                    o2openair.parseAirspacesBorders(oAs)
-                    #o2openair.saveAirspaces()
-                    bExec = True
-                    
-                if self.oLog.CptCritical>criticalErrCatalog:
-                    self.oLog.error("Show Critical items in log file", outConsole=True)
+
+            found = any(item in (CONST.frmtOPENAIR, CONST.frmtALL) for item in oOpts.keys())
+            if found:
+                o2openair = self.getFactory("parser", "openair")        #Récupération dynamique du parser aixm/openair associé au format du fichier source
+                o2openair.parseAirspacesBorders(oAs)
+                self.saveAirspaces(o2openair, criticalErrCatalog)
+                bExec = True
+
+            if criticalErrCatalog>0:
+                self.oLog.critical("Interrupt process; probably for update referential 'groundEstimatedHeight' - Show Critical errors details in log file", outConsole=True)
+            elif self.oLog.CptCritical>criticalErrCatalog:
+                self.oLog.error("Show Critical errors items in log file", outConsole=True)
 
         #############################################################################################
         #Finalisation des traitements
@@ -267,5 +278,4 @@ class AixmControler:
         if bExec: self.oLog.Report()
         self.oLog.closeFile()
         return bExec
-
 

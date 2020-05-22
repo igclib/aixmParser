@@ -212,7 +212,7 @@ class Aixm2json4_5:
         l = []
         for gbv in gbr.find_all("Gbv"):
             if gbv.codeType.string not in ("GRC", "END"):
-                self.oCtrl.oLog.critical("codetype non reconnu\n{0}".format(gbv), outConsole=True)
+                self.oCtrl.oLog.critical("Not recognized codetype\n{0}".format(gbv), outConsole=True)
             g.append(self.oCtrl.oAixmTools.geo2coordinates(gbv))
             l.append((g[-1][0], g[-1][1]))
         geom = {"type":"LineString", "coordinates":g}        
@@ -253,11 +253,11 @@ class Aixm2json4_5:
                 if oBorder:
                     self.parseAirspaceBorder(oZone, oBorder)
                 else:
-                    sAseUidBase = self.oAirspacesCatalog.findZoneUIdBase(sAseUid)         #Identifier la zone de base (de référence)
+                    sAseUidBase = self.oAirspacesCatalog.findZoneUIdBase(sAseUid)       #Identifier la zone de base (de référence)
                     if sAseUidBase==None:
                         self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0}".format(sAseUid), outConsole=False)
                     else:
-                        geom = self.findJsonObjectAirspacesBorders(sAseUidBase)  #Recherche si la zone de base a déjà été pasrsé
+                        geom = self.findJsonObjectAirspacesBorders(sAseUidBase)         #Recherche si la zone de base a déjà été parsé
                         if geom:
                             self.geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
                         else:
@@ -281,10 +281,7 @@ class Aixm2json4_5:
                                            longitude=oBorder.Circle.geoLongCen.string)
             
             radius = float(oBorder.Circle.valRadius.string)
-            if oBorder.uomRadius.string == "NM":
-                radius = radius * aixmReader.CONST.nm
-            if oBorder.uomRadius.string == "KM":
-                radius = radius * 1000
+            radius = self.oCtrl.oAixmTools.convertLength(radius, oBorder.uomRadius.string, "M")   #Convert radius in Meter for GeoJSON format
             
             Pcenter = Point(lon_c, lat_c)
             if self.oCtrl.MakePoints4map:
@@ -295,16 +292,15 @@ class Aixm2json4_5:
             avx_list = oBorder.find_all("Avx")
             for avx_cur in range(0,len(avx_list)):
                 avx = avx_list[avx_cur]
-                
                 codeType = avx.codeType.string
                 
                 # 'Great Circle' or 'Rhumb Line' segment
                 if codeType in ["GRC", "RHL"]:
-                    p = self.oCtrl.oAixmTools.geo2coordinates(avx)
+                    lon, lat = self.oCtrl.oAixmTools.geo2coordinates(avx)
                     if self.oCtrl.MakePoints4map:
-                        pt = Point(p[0], p[1])
+                        pt = Point(lon, lat)
                         points4map.append(self.oCtrl.oAixmTools.make_point(pt, "Point {0} of {1}; type={2}".format(avx_cur, oZone["nameV"], codeType)))
-                    g.append(p)
+                    g.append([lon, lat])
                     
                 # 'Counter Clockwise Arc' or 'Clockwise Arc'
                 #Nota: 'ABE' = 'Arc By Edge' ne semble pas utilisé dans les fichiers SIA-France et Eurocontrol-Europe
@@ -318,8 +314,7 @@ class Aixm2json4_5:
                     center = self.oCtrl.oAixmTools.geo2coordinates(avx,
                                              latitude=avx.geoLatArc.string,
                                              longitude=avx.geoLongArc.string)
-                    
-                    #New source
+
                     Pcenter = Point(center[0], center[1])
                     Pstart = Point(start[0], start[1])
                     Pstop = Point(stop[0], stop[1])
@@ -331,10 +326,7 @@ class Aixm2json4_5:
                     
                     #Alignement pas toujours idéal sur les extremités d'arcs
                     radius = float(avx.valRadiusArc.string)
-                    if avx.uomRadiusArc.string == "NM":
-                        radius = radius * aixmReader.CONST.nm
-                    if avx.uomRadiusArc.string == "KM":
-                        radius = radius * 1000
+                    radius = self.oCtrl.oAixmTools.convertLength(radius, oBorder.uomRadiusArc.string, "M")   #Convert radius in Meter for GeoJSON format
                         
                     #Test non-concluant - Tentative d'amélioration des arc par recalcul systématique du rayon sur la base des coordonnées des points
                     #arc = self.oCtrl.oAixmTools.make_arc2(Pcenter, Pstart, Pstop, 0.0, (codeType=="CWA"))
@@ -363,6 +355,7 @@ class Aixm2json4_5:
                         self.oCtrl.oLog.warning("Missing geoBorder GbrUid='{0}' Name={1}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string), outConsole=False)
                         g.append(start)
                 else:
+                    self.oCtrl.oLog.warning("Default case - GbrUid='{0}' Name={1}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string), outConsole=False)
                     g.append(self.oCtrl.oAixmTools.geo2coordinates(avx))
 
             if len(g) == 0:
@@ -385,39 +378,27 @@ class Aixm2json4_5:
         self.geoAirspaces.append({"type":"Feature", "properties":oZone, "geometry":geom})
         return
 
-    def saveAirspaces(self):
-        if self.oCtrl.ALL:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optALL])
-        if self.oCtrl.IFR:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optIFR])
-        if self.oCtrl.VFR:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optVFR])
-        if self.oCtrl.FreeFlight:
-            self.saveAirspacesFilter(aixmReader.CONST.fileSuffixAndMsg[aixmReader.CONST.optFreeFlight])
-        return
-
     def saveAirspacesFilter(self, aContext):
         context = aContext[0]
         sMsg = "Prepare GeoJSON file - {0}".format(aContext[1])
         self.oCtrl.oLog.info(sMsg)
         barre = bpaTools.ProgressBar(len(self.oAirspacesCatalog.oAirspaces), 20, title=sMsg, isSilent=self.oCtrl.oLog.isSilent)
         idx = 0
-        oGeojson = []       #Initialisation avant filtrage spécifique
+        geojson = []       #Initialisation avant filtrage spécifique
         for o in self.geoAirspaces:
             oZone = o["properties"]
             idx+=1
-            if not oZone["groupZone"]:          #Ne pas traiter les zones de type 'Regroupement'
-                if context=="all":
-                    oGeojson.append(o)
-                if context=="ifr" and not oZone["vfrZone"]:
-                    oGeojson.append(o)
-                if context=="vfr" and oZone["vfrZone"]:
-                    oGeojson.append(o)
-                if context=="ff" and oZone["freeFlightZone"]:
-                    oGeojson.append(o)
+            include = False
+            if not oZone["groupZone"]:                          #Ne pas traiter les zones de type 'Regroupement'
+                if context=="all":                              include = True
+                if context=="ifr" and not oZone["vfrZone"]:     include = True
+                if context=="vfr" and oZone["vfrZone"]:         include = True
+                if context=="ff" and oZone["freeFlightZone"]:   include = True
+                if include == True:
+                    geojson.append(o)
             barre.update(idx)
         barre.reset()        
-        if oGeojson:
-            self.oCtrl.oAixmTools.writeGeojsonFile("airspaces", oGeojson, context)
+        if geojson:
+            self.oCtrl.oAixmTools.writeGeojsonFile("airspaces", geojson, context)
         return
 
