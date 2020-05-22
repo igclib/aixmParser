@@ -85,11 +85,11 @@ class Logger:
     
     def getReport(self) -> str:
         sMsg = self.getInfo() + " - Report"
-        if self.CptInfo:        sMsg += "\n{0:6d} (i)Informations".format(self.CptInfo)
-        if self.CptDebug:       sMsg += "\n{0:6d} (i)Debugs".format(self.CptDebug)
-        if self.CptWarning:     sMsg += "\n{0:6d} (!)Warnings".format(self.CptWarning)
-        if self.CptError:       sMsg += "\n{0:6d} /!\Errors".format(self.CptError)
-        if self.CptCritical:    sMsg += "\n{0:6d} /!\Criticals".format(self.CptCritical)
+        if self.CptInfo:                    sMsg += "\n{0:6d} (i)Info".format(self.CptInfo)
+        if self.CptDebug and self.isDebug:  sMsg += "\n{0:6d} (i)Debug".format(self.CptDebug)
+        if self.CptWarning:                 sMsg += "\n{0:6d} (!)Warning".format(self.CptWarning)
+        if self.CptError:                   sMsg += "\n{0:6d} /!\Error".format(self.CptError)
+        if self.CptCritical:                sMsg += "\n{0:6d} /!\Critical".format(self.CptCritical)
         return sMsg
     
     def Report(self) -> None:
@@ -123,7 +123,7 @@ class Logger:
         if not self.isSilent:
             self.log.info(*args)
             outConsole = kw.get("outConsole", False)
-            if outConsole:    print(*args)
+            if outConsole:    print(str(*args))
         return
                 
     def debug(self, *args, **kw) -> None:
