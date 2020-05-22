@@ -6,6 +6,7 @@ import aixmReader
 
 ### Context applicatif
 callingContext      = "Paragliding-OpenAir-FrenchFiles"         #Your app calling context
+linkContext         = "http://pascal.bazile.free.fr/paraglidingFolder/divers/GPS/OpenAir-Format/"
 appName             = "aixmParser"                              #or your app name
 appPath             = bpaTools.getFilePath(__file__)            #or your app path
 appVersion          = bpaTools.getVersionFile()                 #or your app version
@@ -58,7 +59,7 @@ aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficage
 
 ####  Préparation d'appel ####
 oOpts = bpaTools.getCommandLineOptions(aArgv)                   #Arguments en dictionnaire
-oLog = bpaTools.Logger(appId, logFile, callingContext, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
+oLog = bpaTools.Logger(appId, logFile, callingContext, linkContext, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
 
 if aixmReader.CONST.optCleanLog in oOpts:
     oLog.resetFile()                                #Clean du log si demandé

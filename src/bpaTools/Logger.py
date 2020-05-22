@@ -19,17 +19,18 @@ class Logger:
     #       oLog.log.critical("Un message Critique")
     #       ../..
     #       oLog.closeFile()
-    def __init__(self, sLogName:str, sLogFile:str, sContext="", isDebug:bool=False, isSilent:bool=False)-> None:
+    def __init__(self, sLogName:str, sLogFile:str, sContext="", sLink=None, isDebug:bool=False, isSilent:bool=False)-> None:
         bpaTools.initEvent(__file__, isSilent=isSilent)
         #print(self.__class__.__name__, self.__class__.__module__, self.__class__.__dir__)
         self.sLogName = sLogName
         self.sLogFile = sLogFile
         self.sContext = sContext
+        self.sLink = sLink
         self.log = None
         self.isSilent = isSilent    # Set as 'True' for Silent mode (no log-file, no system-message, but log-report is available ;-)
         self.isDebug = isDebug      # Set as 'True' for write the debug-messages in the log-file
         if not self.isSilent:
-            msg = self.getLongName()
+            msg = self.getMediumName()
             print(msg + "\n" + ("-" * len(msg)))
         self.__initFile__()
         return
@@ -70,8 +71,14 @@ class Logger:
     def getShortName(self) -> str:
         return self.sLogName
     
+    def getMediumName(self) -> str:
+        return "({0}) {1}".format(self.sLogName, self.sContext)     
+    
     def getLongName(self) -> str:
-        return "({0}) {1}".format(self.sLogName, self.sContext) 
+        ret = self.getMediumName()
+        if self.sLink:
+            ret += " - " + self.sLink
+        return ret 
 
     def getInfo(self) -> str:
         return "[{0}.{1}]{2}".format(self.__class__.__module__, self.__class__.__name__, self.sLogName)
