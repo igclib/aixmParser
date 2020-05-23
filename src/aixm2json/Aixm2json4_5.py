@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import bpaTools
-import aixmReader
 from shapely.geometry import LineString, Point
 
 
@@ -32,7 +31,6 @@ class Aixm2json4_5:
             if twr:
                 geojson.append(twr)
             barre.update(idx)
-        
         barre.reset
         self.oCtrl.oAixmTools.writeGeojsonFile("towers", geojson)
         return

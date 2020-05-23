@@ -5,8 +5,7 @@ import aixmReader
 
 
 ### Context applicatif
-callingContext      = "Paragliding-OpenAir-FrenchFiles"         #Your app calling context
-linkContext         = "http://pascal.bazile.free.fr/paraglidingFolder/divers/GPS/OpenAir-Format/"
+callingContext      = "RemoteCall"                              #Your app calling context
 appName             = "aixmParser"                              #or your app name
 appPath             = bpaTools.getFilePath(__file__)            #or your app path
 appVersion          = bpaTools.getVersionFile()                 #or your app version
@@ -15,19 +14,8 @@ outPath             = appPath + "../out/"
 logFile             = outPath + "_" + appName + ".log"
 
 
-####  Quelques fichiers source  ####
-srcPath = "../tst/"
-#------- fichiers officiels & opérationnels ---
-#srcFile = srcPath + "20200618_aixm4.5_SIA-FR.xml"
-#srcFile = srcPath + "20200326_aixm4.5_Eurocontrol-FR.xml"
-#srcFile = srcPath + "20200510_BPa_FR-ZSM_Protection-des-rapaces_aixm45.xml"
-#srcFile = srcPath + "20191210_BPa_ZonesComplementaires_aixm45.xml"
-#srcFile = srcPath + "20190401_WPa_ParcCevennes_aixm45.xml"
-#------- fichiers de tests  ---
-#srcFile = srcPath + "20191213_FFVP_AIRSPACE_FRANCE_TXT_1911_aixm45.xml"
-#srcFile = srcPath + "20191214_BPa_FR-BPa4XCsoar_aixm45.xml"
-#srcFile = srcPath + "aixm5.1_testHeader.xml"
-srcFile = srcPath + "aixm4.5_SIA-FR_map-Airspaces2.xml"
+####  Source test file  ####
+srcFile = "../tst/aixm4.5_SIA-FR_map-Airspaces.xml"
 
 
 ####  Préparation de quelques options d'appels  ####
@@ -59,7 +47,7 @@ aArgv += [aixmReader.CONST.optCleanLog]     #Mode classique avec log et afficage
 
 ####  Préparation d'appel ####
 oOpts = bpaTools.getCommandLineOptions(aArgv)                   #Arguments en dictionnaire
-oLog = bpaTools.Logger(appId, logFile, callingContext, linkContext, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
+oLog = bpaTools.Logger(appId, logFile, callingContext, isSilent=bool(aixmReader.CONST.optSilent in oOpts))
 
 if aixmReader.CONST.optCleanLog in oOpts:
     oLog.resetFile()                                #Clean du log si demandé
@@ -72,7 +60,7 @@ aixmCtrl.execParser(oOpts)                                      #Execution des t
 
 #Bilan des traitements disponible en mode 'Silent' ;-)
 if aixmReader.CONST.optSilent in oOpts:
-    if oLog.CptCritical>0 or oLog.CptError>0:
+    if oLog.CptCritical or oLog.CptError:
         print("/!\ Processing Error(s)")
         print(oLog.getReport())
     

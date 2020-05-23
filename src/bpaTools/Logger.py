@@ -94,6 +94,8 @@ class Logger:
     
     def Report(self) -> None:
         self.info(self.getReport(), outConsole=True)
+        if self.CptWarning or self.CptError or self.CptCritical:
+            self.info("\n/!\Show log file for details - {0}".format(self.sLogFile), outConsole=True)
         return
     
     def default(self) -> logging:
@@ -123,9 +125,10 @@ class Logger:
         if not self.isSilent:
             self.log.info(*args)
             outConsole = kw.get("outConsole", False)
-            if outConsole:    print(str(*args))
+            sMsg = "{}".format(*args)
+            if outConsole:  print(sMsg)
         return
-                
+
     def debug(self, *args, **kw) -> None:
         self.CptDebug += 1
         if self.isDebug and not self.isSilent:
