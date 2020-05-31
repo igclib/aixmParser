@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import bpaTools
-import aixmReader
 from shapely.geometry import LineString, Point
 
 
