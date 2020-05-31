@@ -228,7 +228,7 @@ class AixmAirspaces4_5:
         
         #Phase 2.2 : Construct a global index on columns (collect all columns in contents for complete header of CSV file...)
         #oCols avec initialisation d'une table d'index avec imposition de l'ordonnancement de colonnes choisies
-        oCols = {"zoneType":0, "groupZone":0, "vfrZone":0, "freeFlightZone":0, "excludeAirspaceByReferential":0, "potentialFilter4FreeFlightZone":0, "orgName":0, "UId":0, "id":0, "type":0, "class":0, "name":0, "groundEstimatedHeight":0, "ordinalLowerM":0, "lowerM":0, "ordinalUpperM":0, "upperM":0, "nameV":0, "alt":0, "altM":0, "altV":0, "exceptSAT":0, "exceptSUN":0, "exceptHOL":0, "seeNOTAM":0}
+        oCols = {"zoneType":0, "groupZone":0, "vfrZone":0, "freeFlightZone":0, "excludeAirspaceByReferential":0, "potentialFilter4FreeFlightZone":0, "orgName":0, "UId":0, "id":0, "class":0, "type":0, "localType":0, "codeActivity":0, "name":0, "groundEstimatedHeight":0, "ordinalLowerM":0, "lowerM":0, "ordinalUpperM":0, "upperM":0, "nameV":0, "alt":0, "altM":0, "altV":0, "exceptSAT":0, "exceptSUN":0, "exceptHOL":0, "seeNOTAM":0}
         oCatalog = cat["catalog"]
         for key0,val0 in oCatalog.items():
             for key1,val1 in val0.items():
@@ -344,8 +344,9 @@ class AixmAirspaces4_5:
         else:
             classZone = ase.AseUid.codeType.string
         typeZone = ase.AseUid.codeType.string
-        theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"type":typeZone})
         theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"class":classZone})
+        theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"type":typeZone})
+        theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase, "txtLocalType", "localType", optional=True)       #"ATZ
         
         #ase.AseUid.codeType or CODE_TYPE_ASE Format
         #ICAO DEPRECATED-4.0  [ICAO Region (for example, EUR, NAT, etc).]
@@ -508,14 +509,14 @@ class AixmAirspaces4_5:
         
         #--------------------------------
         #Zones complémentaire avec remarques et description des activations
+        theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase, "codeActivity", "codeActivity", optional=True)    #TFC-AD, BALLOON, MILOPS, ULM
+        theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase, "codeLocInd", "codeLocInd", optional=True)        #LFFF, LIMM
+        theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase, "codeMil", "codeMil", optional=True)              #CIVL
         if ase.Att:
             theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase.Att, "codeWorkHr", "activationCode", optional=True)
             theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase.Att, "txtRmkWorkHr", "activationDesc", optional=True)
         theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase, "txtRmk", "desc", optional=True)
 
-
-        #if theAirspace["nameV"] in["[R] 169 (LFR169)","[R] 208 (LFR208)","[R] 6 E (LFR6E)"]:
-        #    print()
 
         #--------------------------------
         #Traitement spécifique pour signaler les zones non-activables...
