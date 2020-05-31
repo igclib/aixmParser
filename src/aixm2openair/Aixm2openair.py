@@ -93,7 +93,7 @@ class Aixm2openair:
                 else:
                     sAseUidBase = self.oAirspacesCatalog.findZoneUIdBase(sAseUid)           #Identifier la zone de base (de référence)
                     if sAseUidBase==None:
-                        self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0}".format(sAseUid), outConsole=False)
+                        self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0} of {1}".format(sAseUid, oZone["nameV"]), outConsole=False)
                     else:
                         openair = self.findOpenairObjectAirspacesBorders(sAseUidBase)       #Recherche si la zone de base a déjà été parsé
                         if openair:
@@ -101,7 +101,7 @@ class Aixm2openair:
                         else:
                             oBorder = self.oAirspacesCatalog.findAixmObjectAirspacesBorders(sAseUidBase)
                             if oBorder==None:
-                                self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0} AseUidBase={1}".format(sAseUid, sAseUidBase), outConsole=False)
+                                self.oCtrl.oLog.warning("Missing Airspaces Borders AseUid={0} AseUidBase={1} of {2}".format(sAseUid, sAseUidBase, oZone["nameV"]), outConsole=False)
                             else:
                                 self.parseAirspaceBorder(oZone, oBorder)
             barre.update(idx)
@@ -216,10 +216,10 @@ class Aixm2openair:
                         lastPoint = sPoint
                         openair.append(sPoint)
                 else:
-                    self.oCtrl.oLog.warning("Missing geoBorder GbrUid='{0}' Name={1}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string), outConsole=False)
+                    self.oCtrl.oLog.warning("Missing geoBorder GbrUid='{0}' Name={1} of {2}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string, oZone["nameV"]), outConsole=False)
                     g.append(start)
             else:
-                self.oCtrl.oLog.warning("Default case - GbrUid='{0}' Name={1}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string), outConsole=False)
+                self.oCtrl.oLog.warning("Default case - GbrUid='{0}' Name={1} of {2}".format(avx.GbrUid["mid"], avx.GbrUid.txtName.string, oZone["nameV"]), outConsole=False)
                 lon, lat = self.oCtrl.oAixmTools.geo2coordinates(avx)
                 g.append([lon, lat])
                 lat1, lon1 = bpaTools.GeoCoordinates.geoDd2dms(lat,"lat", lon,"lon", ":"," ")
