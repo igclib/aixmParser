@@ -128,7 +128,7 @@ class GroundEstimatedHeight:
     
         #self.oLog.info("aElevation={}".format(aElevation), outConsole=False)
         if lCptError > 40:
-             self.oLog.warning("{0} errors in call elevation_data.get_elevation()\nProperties={1}\naElevation{2}".format(lCptError, oZone[sProp], aElevation), outConsole=False)
+             self.oLog.warning("{0} errors in call elevation_data.get_elevation()\nProperties={1}\naElevation{2}".format(lCptError, oZone[self.sProp], aElevation), outConsole=False)
     
         eSortedElevation = sorted(aElevation)
         
@@ -161,15 +161,17 @@ class GroundEstimatedHeight:
         #Chargement des éléments inconnus du référetentiel
         sSrcFileName = self.refPath + self.sUnknownGroundHeightFileName
         oUnknownGroundHeight = bpaTools.readJsonFile(sSrcFileName)
+        oGroundEstimatedHeight = dict()
+        oFeatures = dict()
         
         if len(oUnknownGroundHeight)==0:
-            self.oLog.warning("Empty reference file : {0}".format(sSrcFileName), outConsole=True)
-        
+            self.oLog.warning("Empty reference file : {0}".format(sSrcFileName), outConsole=False)
         else:
+            self.oLog.info("Load reference file : {0}".format(sSrcFileName), outConsole=False)
+            
             #Select dataObject in src file
             oUnknownHeader = oUnknownGroundHeight[self.sHead]       #Get the header file
             oUnknownContent = oUnknownGroundHeight[self.sRefe]      #Get the content of referential
-            oGroundEstimatedHeight = dict()
             
             #Let specific header file & save the source file
             sHeadFileName = "_{0}_".format(oUnknownHeader["srcAixmOrigin"])
@@ -201,11 +203,13 @@ class GroundEstimatedHeight:
                 oGroundEstimatedHeight = oJson[self.sRefe]        #Ne récupère que les datas du fichier
             
             #Chargement des zones avec description des bordures
-            sGeoJsonFileName = self.srcPath + "airspaces-vfr.geojson"
+            sGeoJsonFileName = self.srcPath + self.headFileName + "airspaces-vfr.geojson"
             if not os.path.exists(sGeoJsonFileName):
-                sGeoJsonFileName = self.srcPath + "airspaces-freeflight.geojson"
+                sGeoJsonFileName = self.srcPath + self.headFileName + "airspaces-freeflight.geojson"
             oGeoJsondata = bpaTools.readJsonFile(sGeoJsonFileName)   
-            oFeatures = oGeoJsondata[self.sFeat]
+            self.oLog.info("Load source data file : {0}".format(sGeoJsonFileName), outConsole=False)
+            if self.sFeat in oGeoJsondata:
+                oFeatures = oGeoJsondata[self.sFeat]
             
             #Analyse de toutes les zones manquante du référentiel
             barre = bpaTools.ProgressBar(len(oUnknownContent), 20, title="Unknown Ground Estimated Height")
@@ -225,7 +229,6 @@ class GroundEstimatedHeight:
                         geoJSON.append(g)
                 barre.update(idx)
             barre.reset()
-        
         
         if len(oGroundEstimatedHeight)>0:
             #Contruction du nouveau référentiel
