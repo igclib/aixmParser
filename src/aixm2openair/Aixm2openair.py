@@ -290,8 +290,11 @@ class Aixm2openair:
             ret = "UNL"                         #sample AH UNL (or UNLIM)
         elif sUnit == "FL":
             ret = sUnit + sValue                #sample AH FL115
-        elif sUnit in ["FT","M"]:
-            ret = sValue + sUnit                #sample AH 2500FT
+        elif sUnit in ["FT","SM","M"]:
+            if sUnit=="SM":
+                ret = sValue + "M"              #sample AH 2500M
+            else:
+                ret = sValue + sUnit            #sample AH 2500FT or AH 2500M
             if sType=="HEI":
                 ret += " AGL"                    #sample AH 2500FT AGL     (or ASFC)
             else:
