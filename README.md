@@ -16,7 +16,7 @@ b/ Description des zones aériennes, disponibles selon deux formats : GeoJSON (f
 	- airspaces-vfr             Cartographie de l'espace aérien VFR (zones situées en dessous le niveau FL115)  
 	- airspaces-freeflight      Cartographie de l'espace aérien dédié Vol-Libre (dessous FL115 +filtre +compl.)  
 	Nota. 
-		- Ces fichiers seront bientôts disponibles au format FAF (Flytec and Brauniger format) et KML (GoogleEarth format) 
+		- Ces fichiers seront bientôts disponibles aux formats FAF (Flytec and Brauniger format) et KML (GoogleEarth format) 
 		- La sortie 'airspaces-freeflight' s'accompagne de deux fichiers Openair pour s'adapter aux types de GPS suivants: 
 			- gpsWithTopo - Cartographie pour: XCsoar / LK8000 / XCTrack / FlyMe / Compass / Syride ../.. et tout autres appareils/logiciels AVEC Carte-Topographique (en capacité de connaître les altitudes terrain)
 			- gpsWithoutTopo - Cartographie pour: Flytec / Brauniger ../.. et tout autres appareils/logiciels SANS Carte-Topographique (n'ayant pas la capacité de connaître les altitudes terrain)
