@@ -1,6 +1,6 @@
 **************************************************
-*     software - (aixmParser v2.6.0) Paragliding-OpenAir-FrenchFiles - http://pascal.bazile.free.fr/paraglidingFolder/divers/GPS/OpenAir-Format/
-*     created - 2020-05-24T12:20:10.400702
+*     software - (aixmParser v2.7.0) Paragliding-OpenAir-FrenchFiles - http://pascal.bazile.free.fr/paraglidingFolder/divers/GPS/OpenAir-Format/
+*     created - 2020-07-01T21:25:54.480767
 *     content - airspaces-all
 *     allMap - True
 *     numberOfAreas - 28
@@ -9,16 +9,19 @@
 *     srcAixmVersion - 4.5
 *     srcAixmCreated - 2020-03-18T17:50:01.141+01:00
 *     srcAixmEffective - 2019-12-05T00:00:00.000+01:00
+*     --------------------------------------------
+*     Information - Cartographie complète de l'espace aérien (IFR + VFR)
+*     GPS type - gpsWithTopo - Cartographie pour: XCsoar / LK8000 / XCTrack / FlyMe / Compass / Syride ../.. et tout autres appareils/logiciels AVEC Carte-Topographique (en capacité de connaître les altitudes terrain)
 **************************************************
 
 ** UId=1613148-tst / Id=LFR506A
 AC R
 AN [R] 506 A (LFR506A) [SFC/FL115] [0m/3505m]
-ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. Sauf SAM, DIM et JF OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
-AActiv [HX] Possible activation H24 except SUN and public HOL
-AExSAT Yes
-AExSUN Yes
-AExHOL Yes
+*ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. Sauf SAM, DIM et JF OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
+*AActiv [HX] Possible activation H24 except SUN and public HOL
+*AExSAT Yes
+*AExSUN Yes
+*AExHOL Yes
 AH FL115
 AL SFC
 V X=47:57:10 N 002:12:32 W
@@ -27,11 +30,11 @@ DC 3.24
 ** UId=1613148-1 / Id=LFR506A
 AC R
 AN [R] 506 A (LFR506A) [SFC/3500FT] [0m/1066m]
-ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. Sauf SAM, DIM et JF OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
-AActiv [HX] Possible activation H24 except SUN and public HOL
-AExSAT Yes
-AExSUN Yes
-AExHOL Yes
+*ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. Sauf SAM, DIM et JF OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
+*AActiv [HX] Possible activation H24 except SUN and public HOL
+*AExSAT Yes
+*AExSUN Yes
+*AExHOL Yes
 AH 3500FT AMSL
 AL SFC
 V X=47:57:10 N 002:12:32 W
@@ -40,9 +43,9 @@ DC 3.24
 ** UId=1613148-2 / Id=LFR506A
 AC R
 AN [R] 506 A (LFR506A) [3500FT ASFC/FL75] [1228m/2286m]
-ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
-AActiv [HX] Possible activation H24 except public HOL
-AExHOL Yes
+*ADescr Administrator: camp de Coëtquidan TEL: 02 97 70 73 85 Except for LF-R 239 COETQUIDAN SUD when active. OAT/GAT: Avoidance mandatory throughout activity, except for ACFT flying for Coëtquidan camp. Activity known on: -ARMOR (CCMAR): 124.725 MHz -RAKI INFO: 317.5 MHz, 143.550 MHz - RENNES APP/INFO: 134.0 MHz
+*AActiv [HX] Possible activation H24 except public HOL
+*AExHOL Yes
 AH FL75
 AL 3500FT AGL
 V X=47:57:10 N 002:12:32 W
@@ -51,10 +54,10 @@ DC 5.0
 ** UId=17782506 / Id=LFR239
 AC R
 AN [R] 239 (LFR239) [500FT ASFC/5000FT AMSL] [281m/1524m]
-ADescr Administrator and NOTAM requester: Flights director (TEL published in the activation NOTAM). GAT/OAT: avoidance mandatory except for aircraft carrying out assistance, rescue or public safety missions, when avoidance is not compatible with the proper execution of these missions, upon flights director's authorisation. Lighting by day: - of the cable by fluorescent red flags every 50 m;  - of the hot air balloon by high intensity flashing lights (1 white, 1 red) Lighting by night of the hot air balloon: - by high intensity flashing lights (1 white, 1 red) - by a DCA spotlight of 1° aperture beam, white coloured. Detection/Identification: - RADAR reflector, transponder 3/A and C (distress code: 7700 in case of cable rupture) Activity known on: - RENNES INFO: 134.000 MHz - ARMOR: 124.725 MHz
-AActiv [HX] Possible activation H24 by NOTAM PN 24 HR. According to protocol. Sauf SAM, DIM
-AExSAT Yes
-AExSUN Yes
+*ADescr Administrator and NOTAM requester: Flights director (TEL published in the activation NOTAM). GAT/OAT: avoidance mandatory except for aircraft carrying out assistance, rescue or public safety missions, when avoidance is not compatible with the proper execution of these missions, upon flights director's authorisation. Lighting by day: - of the cable by fluorescent red flags every 50 m;  - of the hot air balloon by high intensity flashing lights (1 white, 1 red) Lighting by night of the hot air balloon: - by high intensity flashing lights (1 white, 1 red) - by a DCA spotlight of 1° aperture beam, white coloured. Detection/Identification: - RADAR reflector, transponder 3/A and C (distress code: 7700 in case of cable rupture) Activity known on: - RENNES INFO: 134.000 MHz - ARMOR: 124.725 MHz
+*AActiv [HX] Possible activation H24 by NOTAM PN 24 HR. According to protocol. Sauf SAM, DIM
+*AExSAT Yes
+*AExSUN Yes
 AH 5000FT AMSL
 AL 500FT AGL
 V X=47:56:30 N 002:10:24 W
@@ -63,8 +66,8 @@ DC 1.6
 ** UId=13555652 / Id=LFR278
 AC R
 AN [R] 278 (LFR278) [SFC/2500FT ASFC] [0m/888m]
-ADescr Administrator: VANNES MEUCON AD operator. Defined except for the interfering part of the LF-R 94 A MEUCON, when active. Radio contact mandatory with VANNES INFO or A/A if no AFIS. Users' information on: - VANNES INFO - NANTES INFO
-AActiv [H24] H24
+*ADescr Administrator: VANNES MEUCON AD operator. Defined except for the interfering part of the LF-R 94 A MEUCON, when active. Radio contact mandatory with VANNES INFO or A/A if no AFIS. Users' information on: - VANNES INFO - NANTES INFO
+*AActiv [H24] H24
 AH 2500FT AGL
 AL SFC
 DP 47:46:30 N 002:49:14 W
@@ -78,8 +81,8 @@ DB 47:39:39 N 002:50:20 W, 47:46:30 N 002:49:14 W
 ** UId=13555690 / Id=LFR279
 AC R
 AN [R] 279 (LFR279) [2500FT AMSL/FL145] [762m/4419m]
-ADescr Administrator: VANNES MEUCON AD operator. Airspace defined except for the interfering LF-R 94 A and B MEUCON areas, when active. Avoidance mandatory during activity, except for: - ACFT departing from or arriving at VANNES MEUCON AD, - ACFT dropping parachutists, - ACFT conducting assistance, rescue or public safety missions, when they can't avoid the area. Users' information: - VANNES INFO - NANTES INFO/APP - BREST ACC
-AActiv [H24] Possible activation: 0800-2000. SUM: - 1 HR
+*ADescr Administrator: VANNES MEUCON AD operator. Airspace defined except for the interfering LF-R 94 A and B MEUCON areas, when active. Avoidance mandatory during activity, except for: - ACFT departing from or arriving at VANNES MEUCON AD, - ACFT dropping parachutists, - ACFT conducting assistance, rescue or public safety missions, when they can't avoid the area. Users' information: - VANNES INFO - NANTES INFO/APP - BREST ACC
+*AActiv [H24] Possible activation: 0800-2000. SUM: - 1 HR
 AH FL145
 AL 2500FT AMSL
 DP 47:46:41 N 002:41:33 W
@@ -94,8 +97,8 @@ DP 47:46:30 N 002:49:14 W
 ** UId=1564419 / Id=LFRH1
 AC D
 AN [D] TMA LORIENT 1 (LFRH1) [2500FT AMSL/FL195] [762m/5943m]
-ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 or by IROISE INFO. Except for LF-R 14, LF-R 13 A1, LF-R 13 A2, LF-R 13 B1, LF-R 13 B2, LF-R 13 C and LF-R 94 when active.
-AActiv [HX] Activable H24 Possible activation H24
+*ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 or by IROISE INFO. Except for LF-R 14, LF-R 13 A1, LF-R 13 A2, LF-R 13 B1, LF-R 13 B2, LF-R 13 C and LF-R 94 when active.
+*AActiv [HX] Activable H24 Possible activation H24
 AH FL195
 AL 2500FT AMSL
 DP 48:10:34 N 003:24:33 W
@@ -116,8 +119,8 @@ DP 47:55:42 N 003:38:09 W
 ** UId=1564399 / Id=LFRH2
 AC D
 AN [D] TMA LORIENT 2 (LFRH2) [2500FT AMSL/FL195] [762m/5943m]
-ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 by BREST ACC/FIC or by IRROISE APP.
-AActiv [HX] Activable H24 Possible activation H24
+*ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 by BREST ACC/FIC or by IRROISE APP.
+*AActiv [HX] Activable H24 Possible activation H24
 AH FL195
 AL 2500FT AMSL
 V D=-
@@ -131,8 +134,8 @@ DP 47:47:30 N 004:22:00 W
 ** UId=1564395 / Id=LFRH3
 AC E
 AN [E] TMA LORIENT 3 (test) (LFRH3) [FL115/FL125] [3505m/3810m]
-ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 or by BREST ACC/FIC.
-AActiv [HO] Activable H24 Possible activation H24
+*ADescr OAT/GAT procedures. Deactivation of TMA announced by RAI frequency 123.0 or by BREST ACC/FIC.
+*AActiv [HO] Activable H24 Possible activation H24
 AH FL125
 AL FL115
 DP 48:10:30 N 003:37:00 W
@@ -144,8 +147,8 @@ DP 47:57:00 N 003:45:30 W
 ** UId=1564417 / Id=LFRH
 AC D
 AN [D] CTR LORIENT (LFRH) [SFC/2500FT AMSL] [0m/762m]
-ADescr OAT/GAT procedures. CTR deactivation announced on RAI 123.0 or IROISE INFO 119.575 Except for LF- R 14, LF- R 13 A1, LF-R 13 A2 and LF-R 13 B1 when active. Flying over LORIENT AD prohibited BLW 1000ft ASFC.
-AActiv [HX] Possible activation H24
+*ADescr OAT/GAT procedures. CTR deactivation announced on RAI 123.0 or IROISE INFO 119.575 Except for LF- R 14, LF- R 13 A1, LF-R 13 A2 and LF-R 13 B1 when active. Flying over LORIENT AD prohibited BLW 1000ft ASFC.
+*AActiv [HX] Possible activation H24
 AH 2500FT AMSL
 AL SFC
 DP 48:01:38 N 003:26:14 W
@@ -160,8 +163,8 @@ DP 47:50:07 N 003:49:16 W
 ** UId=1562265 / Id=LFD214
 AC D
 AN [D] 214 (LFD214) [SFC/FL195] [0m/5943m]
-ADescr Administrator CCMAR ATLANTIQUE (ARMOR) 124.725 MHz. Airspace defined except for LORIENT TMA when active. IFR flights following QPR-STG axis: entry permitted, follow BREST ACC/FIC instructions. Activity known on: - BREST ACC/FIC/UAC 125.5 - 134.2 MHz - LANN BIHOUE APP 123.0 MHz
-AActiv [HX] MON, FRI: H24. Other hours: announced by NOTAM.
+*ADescr Administrator CCMAR ATLANTIQUE (ARMOR) 124.725 MHz. Airspace defined except for LORIENT TMA when active. IFR flights following QPR-STG axis: entry permitted, follow BREST ACC/FIC instructions. Activity known on: - BREST ACC/FIC/UAC 125.5 - 134.2 MHz - LANN BIHOUE APP 123.0 MHz
+*AActiv [HX] MON, FRI: H24. Other hours: announced by NOTAM.
 AH FL195
 AL SFC
 V X=47:57:10 N 002:00:00 W
@@ -170,8 +173,8 @@ DC 5.0
 ** UId=1566591 / Id=LFR15A
 AC R
 AN [R] 15 A (LFR15A) [SFC/FL85] [0m/2590m]
-ADescr Avoidance mandatory during activity except for ACFT to and from Brienne le Château AD, helicopter to and from Blignicourt heliport and aircraft for air dropping after radio contact on 123.425 MHz. Activation known on: PARIS INFO: 126.1 MHz SEINE INFO: 120.325 MHz SAINT DIZIER APP: 134.775 PARIS ACC: 120.950 MHz.
-AActiv [HX] Possible activation: SR-30 to SS+30
+*ADescr Avoidance mandatory during activity except for ACFT to and from Brienne le Château AD, helicopter to and from Blignicourt heliport and aircraft for air dropping after radio contact on 123.425 MHz. Activation known on: PARIS INFO: 126.1 MHz SEINE INFO: 120.325 MHz SAINT DIZIER APP: 134.775 PARIS ACC: 120.950 MHz.
+*AActiv [HX] Possible activation: SR-30 to SS+30
 AH FL85
 AL SFC
 V X=48:25:47 N 004:28:56 E
@@ -180,8 +183,8 @@ DC 3.0
 ** UId=1566593 / Id=LFR15B
 AC R
 AN [R] 15 B (LFR15B) [FL85/FL195] [2590m/5943m]
-ADescr Avoidance mandatory during activity except for ACFT to and from Brienne le Château AD and aircraft for air dropping after radio contact on 123.425 MHz. Activation known on: PARIS INFO: 126.1 MHz SEINE INFO: 120.325 MHz SAINT DIZIER APP: 134.775 MHz PARIS ACC: 120.950 MHz
-AActiv [HX] Possible activation:SR-30 to SS+30
+*ADescr Avoidance mandatory during activity except for ACFT to and from Brienne le Château AD and aircraft for air dropping after radio contact on 123.425 MHz. Activation known on: PARIS INFO: 126.1 MHz SEINE INFO: 120.325 MHz SAINT DIZIER APP: 134.775 MHz PARIS ACC: 120.950 MHz
+*AActiv [HX] Possible activation:SR-30 to SS+30
 AH FL195
 AL FL85
 DP 48:28:39 N 004:22:36 E
@@ -196,9 +199,11 @@ DP 48:25:47 N 004:22:36 E
 ** UId=1563013 / Id=LFR164A2
 AC R
 AN [R] 164 A2 (LFR164A2) [SFC/6500FT AMSL] [0m/1981m]
-ADescr Except for Alsace LF- R 152 when active. Administrator: OCHEY INFO 130.275 or 03 83 52 64 46. GAT IFR/VFR: Authorised after radio contact, follow instructions. Activity known on OCHEY INFO or RAI 130.275.
-AActiv [HX] Possible activation MON-THU except HOL: 0800-2300 FRI except HOL: 0800-1700 SUM: - 1HR
-AExHOL Yes
+*ADescr Except for Alsace LF- R 152 when active. Administrator: OCHEY INFO 130.275 or 03 83 52 64 46. GAT IFR/VFR: Authorised after radio contact, follow instructions. Activity known on OCHEY INFO or RAI 130.275.
+*AActiv [HX] Possible activation MON-THU except HOL: 0800-2300 FRI except HOL: 0800-1700 SUM: - 1HR
+*AExSAT Yes
+*AExSUN Yes
+*AExHOL Yes
 AH 6500FT AMSL
 AL SFC
 DP 48:36:49 N 006:36:19 E
@@ -212,7 +217,7 @@ DB 48:33:19 N 006:30:36 E, 48:36:49 N 006:36:19 E
 ** UId=400002196660360 / Id=LISFRAM01A
 AC PART
 AN [PART] LISFRAM01A (LISFRAM01A) [FL50/FL100] [1524m/3048m]
-AActiv [H24]
+*AActiv [H24]
 AH FL100
 AL FL50
 DP 43:10:00 N 009:45:00 E
@@ -352,8 +357,8 @@ DP 41:20:00 N 009:45:00 E
 ** UId=1560895 / Id=LFOB1
 AC D
 AN [D] TMA BEAUVAIS 1 (LFOB1) [1500FT AMSL/2500FT AMSL] [457m/762m]
-ADescr Activation known on BEAUVAIS APP or ATIS 118.375MHz and phone number 03 44 11 49 28.
-AActiv [HO] WIN: 0615-2200, SUM: -1HR Extension for all scheduled commercial flights. Extension pour tout vol commercial programmé.
+*ADescr Activation known on BEAUVAIS APP or ATIS 118.375MHz and phone number 03 44 11 49 28.
+*AActiv [HO] WIN: 0615-2200, SUM: -1HR Extension for all scheduled commercial flights. Extension pour tout vol commercial programmé.
 AH 2500FT AMSL
 AL 1500FT AMSL
 DP 49:43:00 N 001:46:43 E
@@ -381,8 +386,8 @@ DP 49:37:51 N 001:43:26 E
 ** UId=1566073 / Id=LFOB2.1
 AC D
 AN [D] TMA BEAUVAIS 2.1 (LFOB2.1) [2500FT AMSL/4500FT AMSL] [762m/1371m]
-ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28.
-AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
+*ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28.
+*AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
 AH 4500FT AMSL
 AL 2500FT AMSL
 DP 49:43:00 N 001:46:43 E
@@ -403,8 +408,8 @@ DP 49:37:51 N 001:43:26 E
 ** UId=1566077 / Id=LFOB3
 AC D
 AN [D] TMA BEAUVAIS 3 (LFOB3) [4500FT AMSL/FL65] [1371m/1981m]
-ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28.
-AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
+*ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28.
+*AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
 AH FL65
 AL 4500FT AMSL
 DP 49:44:19 N 001:35:27 E
@@ -425,8 +430,8 @@ DP 49:40:45 N 001:31:38 E
 ** UId=1566079 / Id=LFOB2.2
 AC D
 AN [D] TMA BEAUVAIS 2.2 (LFOB2.2) [2500FT AMSL/4500FT AMSL] [762m/1371m]
-ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28. Can be downgraded to class E for certain air activities, in accordance with protocol.
-AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
+*ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28. Can be downgraded to class E for certain air activities, in accordance with protocol.
+*AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
 AH 4500FT AMSL
 AL 2500FT AMSL
 DP 49:44:19 N 001:35:27 E
@@ -441,8 +446,8 @@ DP 49:40:45 N 001:31:38 E
 ** UId=1561455 / Id=LFOB
 AC D
 AN [D] CTR BEAUVAIS (LFOB) [SFC/1500FT AMSL] [0m/457m]
-ADescr Extension for all scheduled commercial flights. Activity known on ATIS 118.380 MHz or phone 03 44 84 69 41.
-AActiv [TIMSH] 0615-2200, SUM: -1HR
+*ADescr Extension for all scheduled commercial flights. Activity known on ATIS 118.380 MHz or phone 03 44 84 69 41.
+*AActiv [TIMSH] 0615-2200, SUM: -1HR
 AH 1500FT AMSL
 AL SFC
 DP 49:30:57 N 002:15:58 E
@@ -457,8 +462,8 @@ DP 49:33:55 N 002:09:09 E
 ** UId=1566067 / Id=LFOB4
 AC D
 AN [D] TMA BEAUVAIS 4 (LFOB4) [2500FT AMSL/FL65] [762m/1981m]
-ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28. Can be downgraded to class E for certain air activities, in accordance with protocol.
-AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
+*ADescr Extension for all scheduled commercial flights. Activation known on BEAUVAIS APP or on ATIS 118.375MHz and phone number 03 44 11 49 28. Can be downgraded to class E for certain air activities, in accordance with protocol.
+*AActiv [TIMSH] WIN: 0615-2200, SUM: -1HR
 AH FL65
 AL 2500FT AMSL
 DP 49:43:00 N 002:30:07 E
@@ -471,8 +476,8 @@ DP 49:28:17 N 002:36:10 E
 ** UId=23717425 / Id=LFOB5
 AC D
 AN [D] TMA BEAUVAIS 5 (LFOB5) [FL065/FL085] [1981m/2590m]
-ADescr Activation known on BEAUVAIS APP or ATIS 118.375 MHz and phone number 03 44 11 49 28.
-AActiv [HO] WIN: 0615-2200, SUM: -1HR Extension pour tout vol commercial programmé. Extension for all scheduled commercial flights.
+*ADescr Activation known on BEAUVAIS APP or ATIS 118.375 MHz and phone number 03 44 11 49 28.
+*AActiv [HO] WIN: 0615-2200, SUM: -1HR Extension pour tout vol commercial programmé. Extension for all scheduled commercial flights.
 AH FL085
 AL FL065
 DP 49:44:19 N 001:35:27 E
@@ -490,8 +495,8 @@ DP 49:43:32 N 001:34:37 E
 ** UId=1561401 / Id=LFAQ
 AC D
 AN [D] CTR ALBERT BRAY (LFAQ) [SFC/2000FT AMSL] [0m/609m]
-ADescr Outside these SKED, PPR last working day before 1300 to AD operator. Users information on request through ALBERT TWR or LILLE APP.
-AActiv [TIMSH] WIN: MON-FRI: 0800-1800 SAT: 0830-1600 SUM:- MON-FRI: 0700-1700 SAT: 0730-1600 SUN and public HOL: not provided
+*ADescr Outside these SKED, PPR last working day before 1300 to AD operator. Users information on request through ALBERT TWR or LILLE APP.
+*AActiv [TIMSH] WIN: MON-FRI: 0800-1800 SAT: 0830-1600 SUM:- MON-FRI: 0700-1700 SAT: 0730-1600 SUN and public HOL: not provided
 AH 2000FT AMSL
 AL SFC
 DP 50:03:18 N 002:43:09 E
@@ -511,8 +516,8 @@ DP 50:03:00 N 002:37:36 E
 ** UId=1561747 / Id=LFEE
 AC G
 AN [G] FIR REIMS (LFEE) [SFC/FL195] [0m/5943m]
-ADescr ACC location: REIMS AFS address: LFEEZRZX Phone number: 03 26 84 62 33 Address: B.P. 2702 51051 REIMS CEDEX Frequencies: see ENR 6.1
-AActiv [H24]
+*ADescr ACC location: REIMS AFS address: LFEEZRZX Phone number: 03 26 84 62 33 Address: B.P. 2702 51051 REIMS CEDEX Frequencies: see ENR 6.1
+*AActiv [H24]
 AH FL195
 AL SFC
 DP 49:27:19 N 006:00:11 E
@@ -1651,8 +1656,8 @@ DP 48:57:00 N 004:48:00 E
 ** UId=1564511 / Id=LFR222B
 AC R
 AN [R] 222 B (LFR222B) [SFC/FL230] [0m/7010m]
-ADescr Administrator: 93ème RAM. GAT: avoidance mandatory. OAT: with authorization from administrator. Activity schedule available on: (0600-1000, 1200-1600): 04 56 85 74 81 or 04 56 85 74 06. Actual activity known on MARSEILLE ACC/FIC. Safety officer 93ème RAM: 06 73 90 50 33
-AActiv [NOTAM] Possible activation HN by NOTAM.
+*ADescr Administrator: 93ème RAM. GAT: avoidance mandatory. OAT: with authorization from administrator. Activity schedule available on: (0600-1000, 1200-1600): 04 56 85 74 81 or 04 56 85 74 06. Actual activity known on MARSEILLE ACC/FIC. Safety officer 93ème RAM: 06 73 90 50 33
+*AActiv [NOTAM] Possible activation HN by NOTAM.
 AH FL230
 AL SFC
 DP 45:02:58 N 006:06:04 E
@@ -1678,7 +1683,7 @@ DP 45:01:20 N 006:06:04 E
 ** UId=1560933 / Id=LFLC2
 AC D
 AN [D] TMA CLERMONT 2 (LFLC2) [FL145/FL195] [4419m/5943m]
-AActiv [H24] H24
+*AActiv [H24] H24
 AH FL195
 AL FL145
 DP 46:12:00 N 003:38:00 E
@@ -1699,8 +1704,8 @@ DP 46:10:40 N 002:56:11 E
 ** UId=1560937 / Id=LFLC2.20
 AC D
 AN [D] TMA CLERMONT 2.20 (LFLC2.20) [5500FT AMSL/FL145] [1676m/4419m]
-ADescr Lower limit FL 065 within VIC part 2.1lateral limits. Lower limit FL 110 within CHAMPEIX part 2.2lateral limits. Lower limit FL 085 within ORCINES part 2.3 lateral limits.
-AActiv [H24] H24
+*ADescr Lower limit FL 065 within VIC part 2.1lateral limits. Lower limit FL 110 within CHAMPEIX part 2.2lateral limits. Lower limit FL 085 within ORCINES part 2.3 lateral limits.
+*AActiv [H24] H24
 AH FL145
 AL 5500FT AMSL
 DP 46:12:00 N 003:38:00 E
@@ -1721,8 +1726,8 @@ DP 46:10:40 N 002:56:11 E
 ** UId=1561901 / Id=LFLC2.30
 AC E
 AN [E] TMA CLERMONT 2.30 (LFLC2.30) [2700FT AMSL/5500FT AMSL] [822m/1676m]
-ADescr Lower limit FL 065 within VIC part 2.1 lateral limits. Lower limit FL 110 within CHAMPEIX part 2.2 lateral limits. Lower limit FL 085 within ORCINES part 2.3 lateral limits.
-AActiv [H24] H24
+*ADescr Lower limit FL 065 within VIC part 2.1 lateral limits. Lower limit FL 110 within CHAMPEIX part 2.2 lateral limits. Lower limit FL 085 within ORCINES part 2.3 lateral limits.
+*AActiv [H24] H24
 AH 5500FT AMSL
 AL 2700FT AMSL
 DP 46:12:00 N 003:38:00 E
