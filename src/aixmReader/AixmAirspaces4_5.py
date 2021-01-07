@@ -632,27 +632,77 @@ class AixmAirspaces4_5:
         #    print()
 
         tmpName = cleanName.lower()
-        if (tmpName[:4]=="FIR ".lower()) and (classZone in ["E","F","G"]):
-            classZone="G"         #20210106
-            typeZone="FIR"        #20210106
+        if tmpName.find(" TMA ".lower()) >= 0:
+            if typeZone!="TMA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="TMA"        #20210107
+            cleanName = cleanName.replace(" TMA ", "")
+        elif tmpName[:4]=="TMA ".lower():
+            if typeZone!="TMA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="TMA"        #20210107
             cleanName = cleanName[4:]
-        elif (tmpName[-4:]==" FIR".lower()) and (classZone in ["E","F","G"]):
-            classZone="G"         #20210106
-            typeZone="FIR"        #20210106
+        elif tmpName[-4:]==" TMA".lower():
+            if typeZone!="TMA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="TMA"        #20210107
             cleanName = cleanName[:-4]
+
+        if tmpName.find(" CTR ".lower()) >= 0:
+            if typeZone!="CTR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTR"        #20210107
+            cleanName = cleanName.replace(" CTR ", "")
+        elif tmpName[:4]=="CTR ".lower():
+            if typeZone!="CTR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTR"        #20210107
+            cleanName = cleanName[4:]
+        elif tmpName[-4:]==" CTR".lower():
+            if typeZone!="CTR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTR"        #20210107
+            cleanName = cleanName[:-4]
+
+        if tmpName.find(" CTA ".lower()) >= 0:
+            if typeZone!="CTA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTA"        #20210107
+            cleanName = cleanName.replace(" CTA ", "")
+        elif tmpName[:4]=="CTA ".lower():
+            if typeZone!="CTA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTA"        #20210107
+            cleanName = cleanName[4:]
+        elif tmpName[-4:]==" CTA".lower():
+            if typeZone!="CTA" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="CTA"        #20210107
+            cleanName = cleanName[:-4]
+
+        if tmpName.find(" FIR ".lower()) >= 0:
+            if typeZone!="FIR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="FIR"        #20210107
+            if classZone in ["FIR","NO-FIR","PART","RAS"]:
+                classZone="G"         #20210107
+            cleanName = cleanName.replace(" FIR ", "")
+        elif tmpName[:4]=="FIR ".lower():
+            if typeZone!="FIR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="FIR"        #20210107
+            if classZone in ["FIR","NO-FIR","PART","RAS"]:
+                classZone="G"         #20210107
+            cleanName = cleanName[4:]
+        elif tmpName[-4:]==" FIR".lower():
+            if typeZone!="FIR" and (typeZone==classZone or typeZone in ["PART"]):
+                typeZone="FIR"        #20210107
+            if classZone in ["FIR","NO-FIR","PART","RAS"]:
+                classZone="G"         #20210107
+            cleanName = cleanName[:-4]
+
         if tmpName.find("RADIO MANDATORY ZONE".lower()) >= 0:
-            classZone="RMZ"         #20200802  - "R"
-            typeZone=classZone      #20200802  - "RMZ"
-        elif (tmpName.find("RMZ".lower()) >= 0) and (classZone in ["E","F","G"]):
-            classZone="RMZ"         #20200802  - "R"
-            typeZone=classZone      #20200802  - "RMZ"
+            classZone="RMZ"
+            typeZone=classZone
+        elif (tmpName.find("RMZ".lower()) >= 0) and (classZone in ["E","F","G","RAS"]):
+            classZone="RMZ"
+            typeZone=classZone
 
         if tmpName.find("TRANSPONDER MANDATORY ZONE".lower()) >= 0:
-            classZone="TMZ"         #20200802  - "P"
-            typeZone=classZone      #20200802  - "TMZ"
-        elif (tmpName.find("TMZ".lower()) >= 0) and (classZone in ["E","F","G"]):
-            classZone="TMZ"         #20200802  - "P"
-            typeZone=classZone      #20200802  - "TMZ"
+            classZone="TMZ"
+            typeZone=classZone
+        elif (tmpName.find("TMZ".lower()) >= 0) and (classZone in ["E","F","G","RAS"]):
+            classZone="TMZ"
+            typeZone=classZone
 
         #Filtrage specifique de certaines zones
         if classZone=="{SpecFilter}" and typeZone in ["PART"]:
