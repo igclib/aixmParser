@@ -92,7 +92,7 @@ def addColorProperties(prop:dict, oLog:bpaTools.Logger):
         sFill = "#f07800"
         nFillOpacity = 0
     #Blue
-    elif sClass in ["ZSM","BIRD","PROTECT","D-OTHER","SUR","AER","TRPLA","TRVL","VOL"]:
+    elif sClass in ["ZSM","BIRD","PROTECT","D-OTHER","SUR","AER","TRPLA","TRVL","VOL","REFUEL"]:
         sStroke = "#0000ff"
         sFill = "#ceeffe"
         if prop.get("lower", None)=="SFC":
@@ -100,7 +100,7 @@ def addColorProperties(prop:dict, oLog:bpaTools.Logger):
         else:
             nFillOpacity = 0.2
     #Green
-    elif sClass in ["E","F","G"]:
+    elif sClass in ["E","F","G","SIV","FIS"]:
         sStroke = "#008040"
         sFill = "#80ff80"
         if prop.get("lower", None)=="SFC":

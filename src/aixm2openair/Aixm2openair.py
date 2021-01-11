@@ -40,8 +40,8 @@ def makeOpenair(oAirspace:dict, gpsType:str) -> list:
     #1/ Specific translations for Openair format
     if theClass=="D" and theType=="CTR":    theClass="CTR"     #CTR CONTROL TRAFFIC AREAS
     #2/ Specific translations for Openair format
-    if   theType=="RMZ":                    theClass="RMZ"
-    elif theType=="TMZ":                    theClass="TMZ"
+    #if   theType=="RMZ":                    theClass="RMZ"
+    #elif theType=="TMZ":                    theClass="TMZ"
 
     openair.append("AC {0}".format(theClass))
     openair.append("AN {0}".format(oZone["nameV"]))
