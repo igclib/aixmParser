@@ -131,7 +131,7 @@ def getVerboseName(cat:dict) -> str:
            sVerboseName += " / "
     bNotam:bool = False
     if "seeNOTAM" in cat:
-        bNotam = cat["seeNOTAM"]
+        bNotam = bool(cat["seeNOTAM"])
     if bNotam:
         sVerboseName += "SeeNotam"
     if ("codeActivity" in cat) or ("seeNOTAM" in cat):
@@ -490,6 +490,10 @@ class AixmAirspaces4_5:
             #typeZone="CBA"                     #No change
             if not classZone:   classZone="G"
 
+        #Cases typeZone=="R" - Restricted
+        elif typeZone=="R" and localTypeZone in ["ZRT"]:    ##ZRT = Zone Réglementée Temporaire
+            classZone = typeZone
+            typeZone = localTypeZone
         elif typeZone in ["R","R-AMC"]:         #R [Restricted Area.] / #R-AMC [AMC Manageable Restricted Area.]
             if classZone==None and theCodeActivity in ["NATURE"]:
                 typeZone = theCodeActivity
@@ -505,6 +509,9 @@ class AixmAirspaces4_5:
         elif typeZone=="P":                     #P [Prohibited Area.]
             #typeZone="P"                       #P = Prohibited in Openair format
             if not classZone:   classZone=typeZone
+
+        elif typeZone=="ZIT":                   #ZIT [Zone d'Interdiction Temporaire]
+            if not classZone:   classZone="P"   #P = Prohibited in Openair format
 
         #Cases typeZone=="PROTECT" - #PROTECT [Airspace protected from specific air traffic.]
         elif typeZone=="PROTECT" and theCodeActivity in ["IND-NUCLEAR","IND-OIL"]:
@@ -528,7 +535,7 @@ class AixmAirspaces4_5:
             classZone="Q"                       #Q = Danger area in Openair format
 
         #Cases typeZone=="D-OTHER"  -    #D-OTHER [Activities of dangerous nature (other than a Danger Area).] --> BIRD AREA, GLIDER AREA etc../..
-        elif typeZone=="D-OTHER" and localTypeZone=="ZIT":  #ZIT [Zone d'Interdiction Temporaire] (BPa & SIA France)
+        elif typeZone=="D-OTHER" and localTypeZone=="ZIT":  #ZIT [Zone d'Interdiction Temporaire]
             typeZone=localTypeZone
             if not classZone:   classZone="P"               #P = Prohibited in Openair format
         #BPa - 20210111 - Std "Q" affectation for "MILOPS","ARTILERY","BLAST","SHOOT"
@@ -563,7 +570,7 @@ class AixmAirspaces4_5:
             elif typeZone in ["PART"]:
                 #classZone - No change !
                 typeZone = "TMZ"
-        if typeZone=="RAS" and localTypeZone in ["RMZ"]:    #"RMZ" = Radio Mandatory Zone
+        elif typeZone=="RAS" and localTypeZone in ["RMZ"]:    #"RMZ" = Radio Mandatory Zone
             if  classZone in [None,"E","G"]:
                 classZone = "RMZ"
                 typeZone = classZone
@@ -571,7 +578,7 @@ class AixmAirspaces4_5:
             if  classZone in [None,"E","G"]:
                 classZone = "RMZ"                           #"RMZ" = Radio Mandatory Zone
                 typeZone = classZone
-        if typeZone=="RAS" and localTypeZone in ["FIS"]:    #"FIS" Flight information service
+        elif typeZone=="RAS" and localTypeZone in ["FIS"]:    #"FIS" Flight information service
             if  classZone in [None,"E","G"]:
                 classZone = "G"
                 typeZone = localTypeZone
@@ -898,6 +905,8 @@ class AixmAirspaces4_5:
             #TMZ = Transponder Mandatory Zone / "RTMZ" = Radio + Transponder Mandatory Zone
             #SIV - Service d'Information de Vol
             #FIS - Flight information service
+            #HPZ is used in some States in order to designate 'Helicopter Protected Zone'
+
 
         #ase.codeActivity or CODE_ACTIVITY Format
         #-------------------------------------------
@@ -1101,7 +1110,7 @@ class AixmAirspaces4_5:
                 theAirspace = self.oCtrl.oAixmTools.addProperty(theAirspace, ase.Att, "codeWorkHr", "activationCode", optional=True)
 
             if classZone=="D" and typeZone!="LTA" and theAirspace.get("activationCode", None)!="H24":
-                theAirspace.update({"declassifiable":"Yes"})
+                theAirspace.update({"declassifiable":True})
 
             if ase.Att.Timsh:
                 #Documentation of <Timsh> content
@@ -1223,70 +1232,74 @@ class AixmAirspaces4_5:
         bExcept = False
         if not bExcept:
             #Non activation = Sauf SAM, DIM et JF // except SAT, SUN and public HOL
-            bExcept = bExcept or bool(activationDesc.find("sauf SAM,DIM et JF".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("sauf WE et JF".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN and HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN and public HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-TUE except HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-WED except HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-THU except HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-FRI except HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-FRI except public HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-FRI possible activation H24 Except public HOL".lower()) > 0)
-            bExcept = bExcept or bool(activationDesc.find("MON to FRI except HOL".lower()) >= 0)
+            bExcept = bExcept or bool(activationDesc.find("sauf SAM,DIM et JF".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("sauf WE et JF".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN and HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN and public HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-TUE except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-WED except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-THU except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-FRI except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-FRI except public HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-FRI possible activation H24 Except public HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON to FRI except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON/FRI EXC HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON/THU EXC HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-FRI (EXC HOL)".lower())>=0)
+            bExcept = bExcept or bool((activationDesc.find("MON-FRI".lower())>=0) and (activationDesc.find("EXC HOL".lower())>=0))
             if bExcept:
                 self.oCtrl.oLog.debug("except-SDJF: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":"Yes"})
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":"Yes"})
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":True})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":True})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":True})
         if not bExcept:
             #Non activation = Sauf SAM, DIM // Except SAT and SUN
-            bExcept = bool(activationDesc.find("sauf SAM,DIM".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("sauf WE".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SAT and SUN".lower()) >= 0)
+            bExcept = bool(activationDesc.find("sauf SAM,DIM".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("sauf WE".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SAT,SUN".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SAT and SUN".lower())>=0)
             if bExcept:
                 self.oCtrl.oLog.debug("except-SD: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":"Yes"})
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":True})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":True})
         if not bExcept:
             #Non activation = Sauf DIM et JF // except SUN and public HOL
-            bExcept = bool(activationDesc.find("sauf DIM et JF".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SUN and HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SUN and public HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("MON-SAT except HOL".lower()) >= 0)
+            bExcept = bool(activationDesc.find("sauf DIM et JF".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SUN and HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SUN and public HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("MON-SAT except HOL".lower())>=0)
             if bExcept:
                 self.oCtrl.oLog.debug("except-DJF: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":"Yes"})
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":True})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":True})
         if not bExcept:
             #Non activation = Sauf SAM // Except SAT
-            bExcept = bool(activationDesc.find("sauf SAM".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SAT".lower()) >= 0)
+            bExcept = bool(activationDesc.find("sauf SAM".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SAT".lower())>=0)
             if bExcept:
                 self.oCtrl.oLog.debug("except-S: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSAT":True})
             #Non activation = Sauf DIM // Except SUN
-            bExcept = bool(activationDesc.find("sauf DIM".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except SUN".lower()) >= 0)
+            bExcept = bool(activationDesc.find("sauf DIM".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except SUN".lower())>=0)
             if bExcept:
                 self.oCtrl.oLog.debug("except-D: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptSUN":True})
             #Non activation = Sauf JF // Except HOL
-            bExcept = bool(activationDesc.find("sauf JF".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("except public HOL".lower()) >= 0)
-            bExcept = bExcept or bool(activationDesc.find("EXC HOL".lower()) >= 0)
+            bExcept = bool(activationDesc.find("sauf JF".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("except public HOL".lower())>=0)
+            bExcept = bExcept or bool(activationDesc.find("EXC HOL".lower())>=0)
             if bExcept:
                 self.oCtrl.oLog.debug("except-JF: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":"Yes"})
+                theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"exceptHOL":True})
 
         #--------------------------------
         #Traitement spécifique pour signaler les zones activable par NOTAM
-        bNotam = bool(activationDesc.find("NOTAM".lower()) >= 0)
+        bNotam = bool(activationDesc.find("NOTAM".lower())>=0)
         if bNotam:
             self.oCtrl.oLog.debug("See NOTAM: id={0} name={1}".format(sZoneUId, theAirspace["name"]))
-            theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"seeNOTAM":"Yes"})
+            theAirspace = self.oCtrl.oAixmTools.addField(theAirspace, {"seeNOTAM":True})
 
         #--------------------------------
         #Libellé complet de la zone (V=Verbose)
